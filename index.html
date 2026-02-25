@@ -7,6 +7,8 @@
 <meta name="description" content="Mesurez l'exposition de votre équipe aux 7 crises managériales. Basé sur le livre Management Régénératif de Benjamin Chaminade.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌡️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
 <style>
 :root {
   --bg-deep: #0B1120;
@@ -675,9 +677,15 @@ function renderResults() {
 }
 
 // =====================================================
-// DOWNLOAD REPORT (HTML file user opens then prints as PDF)
+// DOWNLOAD REPORT AS REAL PDF (jsPDF + html2canvas)
 // =====================================================
 function downloadReport() {
+  const btn = document.querySelector('[onclick="downloadReport()"]');
+  const origText = btn.innerHTML;
+  btn.innerHTML = '⏳ Génération du PDF en cours...';
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+
   const scores = getScores();
   const totalScore = scores.reduce((a,s) => a + s.score, 0);
   const maxTotal = scores.reduce((a,s) => a + s.maxScore, 0);
@@ -691,67 +699,124 @@ function downloadReport() {
   const sz = document.getElementById('inp-size').value;
   const dt = new Date().toLocaleDateString('fr-FR');
 
-  let r = `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Rapport - Thermomètre des 7 Crises Managériales</title><style>
-body{font-family:Segoe UI,system-ui,sans-serif;max-width:780px;margin:0 auto;padding:36px 28px;color:#1a1a2e;line-height:1.6;font-size:13.5px}
-h1{color:#1B4F72;font-size:22px;text-align:center;border-bottom:3px solid #FF6B35;padding-bottom:12px}
-h2{color:#2C3E50;font-size:16px;margin-top:26px;border-left:4px solid #FF6B35;padding-left:12px}
-h3{color:#1B4F72;font-size:14px;margin-top:14px}
-.sb{background:#f8f9fa;border-radius:12px;padding:20px;margin:16px 0;text-align:center;border:2px solid #dee2e6}
-.big{font-size:36px;font-weight:800;color:#1B4F72}
-.bar{height:11px;background:#e9ecef;border-radius:6px;margin:7px 0;overflow:hidden}
-.bf{height:100%;border-radius:6px}
-.cc{border:1px solid #dee2e6;border-radius:10px;padding:16px;margin:12px 0;page-break-inside:avoid}
-.co{padding:5px 0 5px 14px;border-left:3px solid #4FC3F7;margin:7px 0;font-size:13px}
-.m{color:#6c757d;font-size:12px;text-align:center}
-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
-td,th{border:1px solid #dee2e6;padding:7px 10px;text-align:left}
-th{background:#f8f9fa;font-weight:700}
-.cta{background:linear-gradient(135deg,#FF6B35,#F7931E);color:white;border-radius:12px;padding:22px;margin:28px 0;text-align:center;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.cta a{color:white;font-weight:700;font-size:17px;text-decoration:underline}
-@media print{body{padding:18px}}
-</style></head><body>`;
+  // Create off-screen container for PDF rendering
+  const container = document.createElement('div');
+  container.id = 'pdf-render-zone';
+  container.style.cssText = 'position:absolute;left:-9999px;top:0;width:800px;background:#fff;color:#1a1a2e;font-family:Segoe UI,system-ui,sans-serif;font-size:13.5px;line-height:1.6;padding:36px 32px;';
 
-  r += `<h1>🌡️ Thermomètre des 7 Crises Managériales</h1>`;
-  r += `<p class="m">${nm}${tm?' — '+tm:''}${sz?' ('+sz+' pers.)':''} — ${dt}</p>`;
-  r += `<div class="sb"><div style="font-size:12px;color:#6c757d;text-transform:uppercase;letter-spacing:2px">Profil de l'équipe : ${profile.emoji} ${profile.name}</div><div class="big">${totalScore} / ${maxTotal}</div><p style="font-size:13px;color:#495057;max-width:560px;margin:10px auto 0">${profile.desc}</p></div>`;
+  let h = '';
+  h += '<h1 style="color:#1B4F72;font-size:22px;text-align:center;border-bottom:3px solid #FF6B35;padding-bottom:12px;margin:0 0 6px">Thermometre des 7 Crises Manageriales</h1>';
+  h += '<p style="color:#6c757d;font-size:12px;text-align:center;margin:0 0 16px">' + nm + (tm ? ' — ' + tm : '') + (sz ? ' (' + sz + ' pers.)' : '') + ' — ' + dt + '</p>';
 
-  r += `<h2>📊 Vue d'ensemble</h2><table><tr><th>Crise</th><th style="text-align:center">Score</th><th style="text-align:center">Niveau</th><th>Action</th></tr>`;
-  sorted.forEach(c => { const lv = getCrisisLevel(c.score); r += `<tr><td><strong>${c.icon} ${c.name}</strong></td><td style="text-align:center"><strong>${c.score}/${c.maxScore}</strong></td><td style="text-align:center">${lv.emoji} ${lv.level}</td><td>${lv.action}</td></tr>`; });
-  r += `</table>`;
+  // Profile box
+  h += '<div style="background:#f8f9fa;border-radius:12px;padding:20px;margin:16px 0;text-align:center;border:2px solid #dee2e6">';
+  h += '<div style="font-size:12px;color:#6c757d;text-transform:uppercase;letter-spacing:2px">Profil de l\'equipe : ' + profile.name + '</div>';
+  h += '<div style="font-size:36px;font-weight:800;color:#1B4F72;margin:6px 0">' + totalScore + ' / ' + maxTotal + '</div>';
+  h += '<p style="font-size:13px;color:#495057;max-width:560px;margin:10px auto 0">' + profile.desc + '</p></div>';
 
-  if (pivot.score > 14) r += `<h2>🎯 Crise pivot : ${pivot.icon} ${pivot.name}</h2><p>${pivot.dominoEffect}</p>`;
+  // Overview table
+  h += '<h2 style="color:#2C3E50;font-size:16px;margin-top:26px;border-left:4px solid #FF6B35;padding-left:12px">Vue d\'ensemble</h2>';
+  h += '<table style="width:100%;border-collapse:collapse;margin:10px 0;font-size:13px"><tr><th style="border:1px solid #dee2e6;padding:7px 10px;background:#f8f9fa;font-weight:700;text-align:left">Crise</th><th style="border:1px solid #dee2e6;padding:7px 10px;background:#f8f9fa;font-weight:700;text-align:center">Score</th><th style="border:1px solid #dee2e6;padding:7px 10px;background:#f8f9fa;font-weight:700;text-align:center">Niveau</th><th style="border:1px solid #dee2e6;padding:7px 10px;background:#f8f9fa;font-weight:700;text-align:left">Action</th></tr>';
+  sorted.forEach(function(c) {
+    var lv = getCrisisLevel(c.score);
+    h += '<tr><td style="border:1px solid #dee2e6;padding:7px 10px"><strong>' + c.name + '</strong></td><td style="border:1px solid #dee2e6;padding:7px 10px;text-align:center"><strong>' + c.score + '/' + c.maxScore + '</strong></td><td style="border:1px solid #dee2e6;padding:7px 10px;text-align:center">' + lv.level + '</td><td style="border:1px solid #dee2e6;padding:7px 10px">' + lv.action + '</td></tr>';
+  });
+  h += '</table>';
 
-  sorted.forEach(c => {
-    const lv = getCrisisLevel(c.score);
-    r += `<div class="cc"><h2 style="border:0;padding:0;margin:0 0 6px">${c.icon} ${c.name} — <span style="color:${lv.color}">${c.score}/${c.maxScore} (${lv.level})</span></h2>`;
-    r += `<p style="font-size:12px;color:#6c757d;margin:0 0 8px;font-style:italic">${c.subtitle}</p>`;
-    r += `<div class="bar"><div class="bf" style="width:${(c.score/c.maxScore)*100}%;background:${c.color}"></div></div>`;
-    r += `<h3>Détail des réponses</h3><table><tr><th style="width:82%">Question</th><th style="width:18%;text-align:center">Score</th></tr>`;
-    c.questions.forEach((q,qi) => { const v = getAnswer(c.crisisIndex,qi)||0; r += `<tr style="${v>=4?'background:#fff3e0':''}"><td>${q}</td><td style="text-align:center;font-weight:700">${v}/5</td></tr>`; });
-    r += `</table>`;
-    if (c.score > 14) { r += `<h3>💡 Conseils pour agir</h3>`; c.conseils.forEach(co => { r += `<div class="co">${co}</div>`; }); }
-    r += `<h3>📖 Dans le livre</h3><p style="font-size:13px;color:#495057">${c.chapitreDetail}</p>`;
-    r += `<h3>⚡ Effet domino</h3><p style="font-size:13px;color:#495057">${c.dominoEffect}</p></div>`;
+  // Pivot crisis
+  if (pivot.score > 14) {
+    h += '<h2 style="color:#2C3E50;font-size:16px;margin-top:26px;border-left:4px solid #FF6B35;padding-left:12px">Crise pivot : ' + pivot.name + '</h2>';
+    h += '<p>' + pivot.dominoEffect + '</p>';
+  }
+
+  // Detail per crisis
+  sorted.forEach(function(c) {
+    var lv = getCrisisLevel(c.score);
+    h += '<div style="border:1px solid #dee2e6;border-radius:10px;padding:16px;margin:12px 0">';
+    h += '<h2 style="border:0;padding:0;margin:0 0 6px;color:#2C3E50;font-size:16px">' + c.name + ' — <span style="color:' + lv.color + '">' + c.score + '/' + c.maxScore + ' (' + lv.level + ')</span></h2>';
+    h += '<p style="font-size:12px;color:#6c757d;margin:0 0 8px;font-style:italic">' + c.subtitle + '</p>';
+    h += '<div style="height:11px;background:#e9ecef;border-radius:6px;margin:7px 0;overflow:hidden"><div style="height:100%;border-radius:6px;width:' + ((c.score/c.maxScore)*100) + '%;background:' + c.color + '"></div></div>';
+
+    h += '<h3 style="color:#1B4F72;font-size:14px;margin-top:14px">Detail des reponses</h3>';
+    h += '<table style="width:100%;border-collapse:collapse;margin:10px 0;font-size:13px"><tr><th style="border:1px solid #dee2e6;padding:7px 10px;background:#f8f9fa;font-weight:700;text-align:left;width:82%">Question</th><th style="border:1px solid #dee2e6;padding:7px 10px;background:#f8f9fa;font-weight:700;text-align:center;width:18%">Score</th></tr>';
+    c.questions.forEach(function(q, qi) {
+      var v = getAnswer(c.crisisIndex, qi) || 0;
+      h += '<tr' + (v >= 4 ? ' style="background:#fff3e0"' : '') + '><td style="border:1px solid #dee2e6;padding:7px 10px">' + q + '</td><td style="border:1px solid #dee2e6;padding:7px 10px;text-align:center;font-weight:700">' + v + '/5</td></tr>';
+    });
+    h += '</table>';
+
+    if (c.score > 14) {
+      h += '<h3 style="color:#1B4F72;font-size:14px;margin-top:14px">Conseils pour agir</h3>';
+      c.conseils.forEach(function(co) { h += '<div style="padding:5px 0 5px 14px;border-left:3px solid #4FC3F7;margin:7px 0;font-size:13px">' + co + '</div>'; });
+    }
+    h += '<h3 style="color:#1B4F72;font-size:14px;margin-top:14px">Dans le livre</h3><p style="font-size:13px;color:#495057">' + c.chapitreDetail + '</p>';
+    h += '<h3 style="color:#1B4F72;font-size:14px;margin-top:14px">Effet domino</h3><p style="font-size:13px;color:#495057">' + c.dominoEffect + '</p>';
+    h += '</div>';
   });
 
-  r += `<h2>🚀 Plan d'action pour l'équipe</h2>`;
-  r += `<p><strong>⚡ Cette semaine :</strong> ${pivot.score>21?'Traitez en urgence la crise « '+pivot.name+' ».':'Définissez votre première priorité.'}</p>`;
-  r += `<p><strong>🎯 Ce mois :</strong> ${topCrises.length>0?'Concentrez-vous sur : '+topCrises.slice(0,2).map(c=>c.name).join(' et ')+'.':'Maintenez votre vigilance.'}</p>`;
-  r += `<p><strong>📈 Ce trimestre :</strong> Déployez les feuilles de route. Refaites ce diagnostic dans 3 mois.</p>`;
+  // Action plan
+  h += '<h2 style="color:#2C3E50;font-size:16px;margin-top:26px;border-left:4px solid #FF6B35;padding-left:12px">Plan d\'action pour l\'equipe</h2>';
+  h += '<p><strong>Cette semaine :</strong> ' + (pivot.score > 21 ? 'Traitez en urgence la crise ' + pivot.name + '.' : 'Definissez votre premiere priorite.') + '</p>';
+  h += '<p><strong>Ce mois :</strong> ' + (topCrises.length > 0 ? 'Concentrez-vous sur : ' + topCrises.slice(0,2).map(function(c){return c.name}).join(' et ') + '.' : 'Maintenez votre vigilance.') + '</p>';
+  h += '<p><strong>Ce trimestre :</strong> Deployez les feuilles de route. Refaites ce diagnostic dans 3 mois.</p>';
 
-  r += `<div class="cta"><p style="margin:0 0 6px;font-size:14px">🤝 Besoin d'un accompagnement pour votre équipe ?</p><p style="margin:0 0 10px;font-size:13px;opacity:0.9">Conférences · Ateliers · Formations · Coaching</p><a href="https://benjaminchaminade.com/contact/">Contactez Benjamin Chaminade</a><p style="margin:6px 0 0;font-size:12px;opacity:0.8">https://benjaminchaminade.com/contact/</p></div>`;
-  r += `<p class="m" style="margin-top:24px;border-top:1px solid #dee2e6;padding-top:12px">Issu du livre « Management Régénératif » de Benjamin Chaminade<br><strong>Pour imprimer en PDF :</strong> ouvrez ce fichier dans votre navigateur puis Ctrl+P (ou ⌘+P) → « Enregistrer en PDF »</p>`;
-  r += `</body></html>`;
+  // CTA
+  h += '<div style="background:linear-gradient(135deg,#FF6B35,#F7931E);color:white;border-radius:12px;padding:22px;margin:28px 0;text-align:center">';
+  h += '<p style="margin:0 0 6px;font-size:14px">Besoin d\'un accompagnement pour votre equipe ?</p>';
+  h += '<p style="margin:0 0 10px;font-size:13px;opacity:0.9">Conferences - Ateliers - Formations - Coaching</p>';
+  h += '<p style="margin:0;font-weight:700;font-size:17px">Contactez Benjamin Chaminade</p>';
+  h += '<p style="margin:6px 0 0;font-size:12px;opacity:0.8">https://benjaminchaminade.com/contact/</p></div>';
 
-  const blob = new Blob([r], {type:'text/html;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'rapport-7-crises-'+dt.replace(/\//g,'-')+'.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  // Footer
+  h += '<p style="color:#6c757d;font-size:12px;text-align:center;margin-top:24px;border-top:1px solid #dee2e6;padding-top:12px">Issu du livre Management Regeneratif de Benjamin Chaminade</p>';
+
+  container.innerHTML = h;
+  document.body.appendChild(container);
+
+  // Use html2canvas + jsPDF to generate real PDF
+  setTimeout(function() {
+    html2canvas(container, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: '#ffffff',
+      width: 800
+    }).then(function(canvas) {
+      var jsPDF = window.jspdf.jsPDF;
+      var imgData = canvas.toDataURL('image/jpeg', 0.95);
+      var imgW = 210; // A4 width in mm
+      var pageH = 297; // A4 height in mm
+      var imgH = (canvas.height * imgW) / canvas.width;
+      var heightLeft = imgH;
+      var position = 0;
+
+      var pdf = new jsPDF('p', 'mm', 'a4');
+      pdf.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
+      heightLeft -= pageH;
+
+      while (heightLeft > 0) {
+        position = -(pageH * (Math.ceil(imgH / pageH) - Math.ceil(heightLeft / pageH)));
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
+        heightLeft -= pageH;
+      }
+
+      pdf.save('rapport-7-crises-' + dt.replace(/\//g, '-') + '.pdf');
+
+      // Cleanup
+      document.body.removeChild(container);
+      btn.innerHTML = origText;
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }).catch(function(err) {
+      console.error('PDF generation error:', err);
+      document.body.removeChild(container);
+      btn.innerHTML = origText;
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      alert('Erreur lors de la generation du PDF. Essayez avec Ctrl+P > Enregistrer en PDF.');
+    });
+  }, 300);
 }
 </script>
 </body>
