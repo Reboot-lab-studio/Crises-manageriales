@@ -7,8 +7,6 @@
 <meta name="description" content="Mesurez l'exposition de votre équipe aux 7 crises managériales. Basé sur le livre Management Régénératif de Benjamin Chaminade.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌡️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
 <style>
 :root {
@@ -683,167 +681,133 @@ function renderResults() {
 
 // =====================================================
 // =====================================================
-// DOWNLOAD REPORT AS WORD (.docx) using docx.js
+// =====================================================
+// DOWNLOAD REPORT AS WORD (.doc) — ZERO DEPENDENCY
+// Uses MHTML format that Word opens natively
 // =====================================================
 function downloadReport() {
-  const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle, AlignmentType, HeadingLevel, ShadingType, TableLayoutType } = docx;
+  var scores = getScores();
+  var totalScore = scores.reduce(function(a,s){return a+s.score},0);
+  var maxTotal = scores.reduce(function(a,s){return a+s.maxScore},0);
+  var profile = getTeamProfile(totalScore);
+  var sorted = scores.slice().sort(function(a,b){return b.score-a.score});
+  var topCrises = sorted.filter(function(c){return c.score>14});
+  var pivot = sorted[0];
 
-  const scores = getScores();
-  const totalScore = scores.reduce((a,s) => a + s.score, 0);
-  const maxTotal = scores.reduce((a,s) => a + s.maxScore, 0);
-  const profile = getTeamProfile(totalScore);
-  const sorted = [...scores].sort((a,b) => b.score - a.score);
-  const topCrises = sorted.filter(c => c.score > 14);
-  const pivot = sorted[0];
+  var nm = document.getElementById('inp-name').value || 'Manager';
+  var tm = document.getElementById('inp-team').value;
+  var sz = document.getElementById('inp-size').value;
+  var dt = new Date().toLocaleDateString('fr-FR');
 
-  const nm = document.getElementById('inp-name').value || 'Manager';
-  const tm = document.getElementById('inp-team').value;
-  const sz = document.getElementById('inp-size').value;
-  const dt = new Date().toLocaleDateString('fr-FR');
-
-  const ORANGE = 'FF6B35';
-  const NAVY = '1B4F72';
-  const DARK = '2C3E50';
-  const GRAY = '6C757D';
-
-  const noBorder = { top:{style:BorderStyle.NONE,size:0}, bottom:{style:BorderStyle.NONE,size:0}, left:{style:BorderStyle.NONE,size:0}, right:{style:BorderStyle.NONE,size:0} };
-  const thinBorder = { top:{style:BorderStyle.SINGLE,size:1,color:'DEE2E6'}, bottom:{style:BorderStyle.SINGLE,size:1,color:'DEE2E6'}, left:{style:BorderStyle.SINGLE,size:1,color:'DEE2E6'}, right:{style:BorderStyle.SINGLE,size:1,color:'DEE2E6'} };
-
-  function levelColor(score) {
-    if (score <= 7) return '2E7D32';
-    if (score <= 14) return 'F57F17';
-    if (score <= 21) return 'E65100';
-    return 'C62828';
-  }
-
-  const children = [];
+  var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
+  html += '<head><meta charset="utf-8"><title>Rapport 7 Crises</title>';
+  html += '<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->';
+  html += '<style>';
+  html += '@page{size:A4;margin:2cm 1.8cm}';
+  html += 'body{font-family:Calibri,sans-serif;font-size:11pt;color:#1a1a2e;line-height:1.5}';
+  html += 'h1{color:#1B4F72;font-size:18pt;text-align:center;border-bottom:3pt solid #FF6B35;padding-bottom:8pt}';
+  html += 'h2{color:#2C3E50;font-size:13pt;margin-top:18pt;border-left:4pt solid #FF6B35;padding-left:8pt}';
+  html += 'h3{color:#1B4F72;font-size:11pt;margin-top:10pt}';
+  html += '.info{color:#6c757d;font-size:9pt;text-align:center}';
+  html += '.profile-box{background:#f8f9fa;border:2pt solid #dee2e6;padding:14pt;text-align:center;margin:12pt 0}';
+  html += '.big-score{font-size:28pt;font-weight:bold;color:#1B4F72}';
+  html += 'table{width:100%;border-collapse:collapse;margin:8pt 0;font-size:10pt}';
+  html += 'td,th{border:1pt solid #dee2e6;padding:5pt 8pt}';
+  html += 'th{background:#f8f9fa;font-weight:bold}';
+  html += '.conseil{padding:4pt 0 4pt 10pt;border-left:3pt solid #4FC3F7;margin:5pt 0;font-size:10pt}';
+  html += '.cta-box{background:#FF6B35;color:white;padding:16pt;text-align:center;margin:20pt 0;font-size:11pt}';
+  html += '.cta-box a{color:white;font-weight:bold;font-size:13pt}';
+  html += '.highlight{background:#fff3e0}';
+  html += '.footer{color:#6c757d;font-size:8pt;text-align:center;border-top:1pt solid #dee2e6;padding-top:8pt;margin-top:20pt}';
+  html += '.pagebreak{page-break-before:always}';
+  html += '</style></head><body>';
 
   // Title
-  children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing:{after:100}, children:[new TextRun({text:'Thermomètre des 7 Crises Managériales', bold:true, size:36, color:NAVY, font:'Calibri'})]}));
-  children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing:{after:60}, border:{bottom:{style:BorderStyle.SINGLE,size:3,color:ORANGE}}, children:[]}));
+  html += '<h1>Thermom&egrave;tre des 7 Crises Manag&eacute;riales</h1>';
+  html += '<p class="info">' + esc(nm) + (tm ? ' &mdash; ' + esc(tm) : '') + (sz ? ' (' + esc(sz) + ' pers.)' : '') + ' &mdash; ' + dt + '</p>';
 
-  // Info line
-  let info = nm;
-  if (tm) info += ' — ' + tm;
-  if (sz) info += ' (' + sz + ' pers.)';
-  info += ' — ' + dt;
-  children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing:{after:300}, children:[new TextRun({text:info, size:20, color:GRAY, font:'Calibri'})]}));
+  // Profile
+  html += '<div class="profile-box">';
+  html += '<p style="font-size:9pt;color:#6c757d;text-transform:uppercase;letter-spacing:2pt">PROFIL DE L&rsquo;&Eacute;QUIPE : ' + esc(profile.name) + '</p>';
+  html += '<p class="big-score">' + totalScore + ' / ' + maxTotal + '</p>';
+  html += '<p style="font-size:10pt;color:#495057">' + esc(profile.desc) + '</p>';
+  html += '</div>';
 
-  // Profile box
-  children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing:{before:100,after:60}, shading:{type:ShadingType.SOLID,color:'F8F9FA'}, children:[new TextRun({text:'PROFIL DE L\'ÉQUIPE : ' + profile.name.toUpperCase(), size:18, color:GRAY, font:'Calibri', characterSpacing:80})]}));
-  children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing:{after:60}, shading:{type:ShadingType.SOLID,color:'F8F9FA'}, children:[new TextRun({text:totalScore + ' / ' + maxTotal, bold:true, size:52, color:NAVY, font:'Calibri'})]}));
-  children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing:{after:300}, shading:{type:ShadingType.SOLID,color:'F8F9FA'}, children:[new TextRun({text:profile.desc, size:20, color:'495057', font:'Calibri'})]}));
-
-  // Overview heading
-  children.push(new Paragraph({ spacing:{before:300,after:200}, border:{left:{style:BorderStyle.SINGLE,size:6,color:ORANGE}}, indent:{left:200}, children:[new TextRun({text:'  Vue d\'ensemble', bold:true, size:26, color:DARK, font:'Calibri'})]}));
-
-  // Overview table
-  const headerRow = new TableRow({ tableHeader:true, children:[
-    new TableCell({shading:{type:ShadingType.SOLID,color:'F8F9FA'}, borders:thinBorder, width:{size:3200,type:WidthType.DXA}, children:[new Paragraph({children:[new TextRun({text:'Crise',bold:true,size:20,font:'Calibri'})]})] }),
-    new TableCell({shading:{type:ShadingType.SOLID,color:'F8F9FA'}, borders:thinBorder, width:{size:1200,type:WidthType.DXA}, children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:'Score',bold:true,size:20,font:'Calibri'})]})] }),
-    new TableCell({shading:{type:ShadingType.SOLID,color:'F8F9FA'}, borders:thinBorder, width:{size:1400,type:WidthType.DXA}, children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:'Niveau',bold:true,size:20,font:'Calibri'})]})] }),
-    new TableCell({shading:{type:ShadingType.SOLID,color:'F8F9FA'}, borders:thinBorder, width:{size:3200,type:WidthType.DXA}, children:[new Paragraph({children:[new TextRun({text:'Action',bold:true,size:20,font:'Calibri'})]})] })
-  ]});
-
-  const dataRows = sorted.map(function(c) {
-    const lv = getCrisisLevel(c.score);
-    return new TableRow({ children:[
-      new TableCell({borders:thinBorder, children:[new Paragraph({children:[new TextRun({text:c.name,bold:true,size:20,font:'Calibri'})]})] }),
-      new TableCell({borders:thinBorder, children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:c.score+'/'+c.maxScore,bold:true,size:20,font:'Calibri'})]})] }),
-      new TableCell({borders:thinBorder, children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:lv.level,size:20,color:levelColor(c.score),font:'Calibri',bold:true})]})] }),
-      new TableCell({borders:thinBorder, children:[new Paragraph({children:[new TextRun({text:lv.action,size:20,font:'Calibri'})]})] })
-    ]});
+  // Vue d'ensemble
+  html += '<h2>Vue d&rsquo;ensemble</h2>';
+  html += '<table><tr><th>Crise</th><th style="text-align:center">Score</th><th style="text-align:center">Niveau</th><th>Action</th></tr>';
+  sorted.forEach(function(c) {
+    var lv = getCrisisLevel(c.score);
+    html += '<tr><td><b>' + esc(c.name) + '</b></td><td style="text-align:center"><b>' + c.score + '/' + c.maxScore + '</b></td><td style="text-align:center;color:' + lv.color + '"><b>' + esc(lv.level) + '</b></td><td>' + esc(lv.action) + '</td></tr>';
   });
+  html += '</table>';
 
-  children.push(new Table({ width:{size:100,type:WidthType.PERCENTAGE}, layout:TableLayoutType.FIXED, rows:[headerRow].concat(dataRows) }));
-
-  // Pivot crisis
+  // Crise pivot
   if (pivot.score > 14) {
-    children.push(new Paragraph({ spacing:{before:400,after:200}, border:{left:{style:BorderStyle.SINGLE,size:6,color:ORANGE}}, indent:{left:200}, children:[new TextRun({text:'  Crise pivot : ' + pivot.name, bold:true, size:26, color:DARK, font:'Calibri'})]}));
-    children.push(new Paragraph({ spacing:{after:200}, children:[new TextRun({text:pivot.dominoEffect, size:20, color:'495057', font:'Calibri'})]}));
+    html += '<h2>Crise pivot : ' + esc(pivot.name) + '</h2>';
+    html += '<p>' + esc(pivot.dominoEffect) + '</p>';
   }
 
-  // Detail per crisis
-  sorted.forEach(function(c) {
-    const lv = getCrisisLevel(c.score);
+  // Détail par crise
+  sorted.forEach(function(c, idx) {
+    var lv = getCrisisLevel(c.score);
+    html += '<div' + (idx > 0 ? ' class="pagebreak"' : '') + '>';
+    html += '<h2 style="border:0;padding:0">' + esc(c.name) + ' &mdash; <span style="color:' + lv.color + '">' + c.score + '/' + c.maxScore + ' (' + esc(lv.level) + ')</span></h2>';
+    html += '<p style="font-size:9pt;color:#6c757d;font-style:italic">' + esc(c.subtitle) + '</p>';
 
-    children.push(new Paragraph({ spacing:{before:400,after:80}, pageBreakBefore:true, children:[
-      new TextRun({text:c.name + ' — ', bold:true, size:26, color:DARK, font:'Calibri'}),
-      new TextRun({text:c.score + '/' + c.maxScore + ' (' + lv.level + ')', bold:true, size:26, color:levelColor(c.score), font:'Calibri'})
-    ]}));
-    children.push(new Paragraph({ spacing:{after:200}, children:[new TextRun({text:c.subtitle, italics:true, size:20, color:GRAY, font:'Calibri'})]}));
-
-    // Questions table
-    children.push(new Paragraph({ spacing:{before:200,after:100}, children:[new TextRun({text:'Détail des réponses', bold:true, size:22, color:NAVY, font:'Calibri'})]}));
-
-    const qHeader = new TableRow({ tableHeader:true, children:[
-      new TableCell({shading:{type:ShadingType.SOLID,color:'F8F9FA'}, borders:thinBorder, width:{size:7800,type:WidthType.DXA}, children:[new Paragraph({children:[new TextRun({text:'Question',bold:true,size:20,font:'Calibri'})]})] }),
-      new TableCell({shading:{type:ShadingType.SOLID,color:'F8F9FA'}, borders:thinBorder, width:{size:1200,type:WidthType.DXA}, children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:'Score',bold:true,size:20,font:'Calibri'})]})] })
-    ]});
-
-    const qRows = c.questions.map(function(q, qi) {
-      const v = getAnswer(c.crisisIndex, qi) || 0;
-      const bg = v >= 4 ? 'FFF3E0' : 'FFFFFF';
-      return new TableRow({ children:[
-        new TableCell({shading:{type:ShadingType.SOLID,color:bg}, borders:thinBorder, children:[new Paragraph({children:[new TextRun({text:q,size:20,font:'Calibri'})]})] }),
-        new TableCell({shading:{type:ShadingType.SOLID,color:bg}, borders:thinBorder, children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:v+'/5',bold:true,size:20,font:'Calibri'})]})] })
-      ]});
+    html += '<h3>D&eacute;tail des r&eacute;ponses</h3>';
+    html += '<table><tr><th style="width:80%">Question</th><th style="width:20%;text-align:center">Score</th></tr>';
+    c.questions.forEach(function(q, qi) {
+      var v = getAnswer(c.crisisIndex, qi) || 0;
+      html += '<tr' + (v >= 4 ? ' class="highlight"' : '') + '><td>' + esc(q) + '</td><td style="text-align:center;font-weight:bold">' + v + '/5</td></tr>';
     });
+    html += '</table>';
 
-    children.push(new Table({ width:{size:100,type:WidthType.PERCENTAGE}, layout:TableLayoutType.FIXED, rows:[qHeader].concat(qRows) }));
-
-    // Conseils
     if (c.score > 14) {
-      children.push(new Paragraph({ spacing:{before:200,after:100}, children:[new TextRun({text:'Conseils pour agir', bold:true, size:22, color:NAVY, font:'Calibri'})]}));
-      c.conseils.forEach(function(co) {
-        children.push(new Paragraph({ spacing:{after:60}, indent:{left:300}, border:{left:{style:BorderStyle.SINGLE,size:4,color:'4FC3F7'}}, children:[new TextRun({text:'  ' + co, size:20, font:'Calibri'})]}));
-      });
+      html += '<h3>Conseils pour agir</h3>';
+      c.conseils.forEach(function(co) { html += '<div class="conseil">' + esc(co) + '</div>'; });
     }
 
-    // Dans le livre
-    children.push(new Paragraph({ spacing:{before:200,after:60}, children:[new TextRun({text:'Dans le livre', bold:true, size:22, color:NAVY, font:'Calibri'})]}));
-    children.push(new Paragraph({ spacing:{after:60}, children:[new TextRun({text:c.chapitreDetail, size:20, color:'495057', font:'Calibri'})]}));
-
-    // Effet domino
-    children.push(new Paragraph({ spacing:{before:200,after:60}, children:[new TextRun({text:'Effet domino', bold:true, size:22, color:NAVY, font:'Calibri'})]}));
-    children.push(new Paragraph({ spacing:{after:200}, children:[new TextRun({text:c.dominoEffect, size:20, color:'495057', font:'Calibri'})]}));
+    html += '<h3>Dans le livre</h3><p style="font-size:10pt;color:#495057">' + esc(c.chapitreDetail) + '</p>';
+    html += '<h3>Effet domino</h3><p style="font-size:10pt;color:#495057">' + esc(c.dominoEffect) + '</p>';
+    html += '</div>';
   });
 
-  // Action plan
-  children.push(new Paragraph({ spacing:{before:400,after:200}, pageBreakBefore:true, border:{left:{style:BorderStyle.SINGLE,size:6,color:ORANGE}}, indent:{left:200}, children:[new TextRun({text:'  Plan d\'action pour l\'équipe', bold:true, size:26, color:DARK, font:'Calibri'})]}));
-
-  children.push(new Paragraph({ spacing:{after:100}, children:[
-    new TextRun({text:'Cette semaine : ', bold:true, size:20, font:'Calibri'}),
-    new TextRun({text: pivot.score > 21 ? 'Traitez en urgence la crise « ' + pivot.name + ' ».' : 'Définissez votre première priorité.', size:20, font:'Calibri'})
-  ]}));
-  children.push(new Paragraph({ spacing:{after:100}, children:[
-    new TextRun({text:'Ce mois : ', bold:true, size:20, font:'Calibri'}),
-    new TextRun({text: topCrises.length > 0 ? 'Concentrez-vous sur : ' + topCrises.slice(0,2).map(function(c){return c.name}).join(' et ') + '.' : 'Maintenez votre vigilance.', size:20, font:'Calibri'})
-  ]}));
-  children.push(new Paragraph({ spacing:{after:300}, children:[
-    new TextRun({text:'Ce trimestre : ', bold:true, size:20, font:'Calibri'}),
-    new TextRun({text:'Déployez les feuilles de route. Refaites ce diagnostic dans 3 mois.', size:20, font:'Calibri'})
-  ]}));
+  // Plan d'action
+  html += '<div class="pagebreak">';
+  html += '<h2>Plan d&rsquo;action pour l&rsquo;&eacute;quipe</h2>';
+  html += '<p><b>Cette semaine :</b> ' + (pivot.score > 21 ? 'Traitez en urgence la crise &laquo;&nbsp;' + esc(pivot.name) + '&nbsp;&raquo;.' : 'D&eacute;finissez votre premi&egrave;re priorit&eacute;.') + '</p>';
+  html += '<p><b>Ce mois :</b> ' + (topCrises.length > 0 ? 'Concentrez-vous sur : ' + topCrises.slice(0,2).map(function(c){return esc(c.name)}).join(' et ') + '.' : 'Maintenez votre vigilance.') + '</p>';
+  html += '<p><b>Ce trimestre :</b> D&eacute;ployez les feuilles de route. Refaites ce diagnostic dans 3 mois.</p>';
+  html += '</div>';
 
   // CTA
-  children.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{before:200,after:60}, shading:{type:ShadingType.SOLID,color:ORANGE}, children:[new TextRun({text:'Besoin d\'un accompagnement pour votre équipe ?', bold:true, size:22, color:'FFFFFF', font:'Calibri'})]}));
-  children.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{after:60}, shading:{type:ShadingType.SOLID,color:ORANGE}, children:[new TextRun({text:'Conférences · Ateliers · Formations · Coaching', size:20, color:'FFFFFF', font:'Calibri'})]}));
-  children.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{after:60}, shading:{type:ShadingType.SOLID,color:ORANGE}, children:[new TextRun({text:'Contactez Benjamin Chaminade', bold:true, size:28, color:'FFFFFF', font:'Calibri'})]}));
-  children.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{after:200}, shading:{type:ShadingType.SOLID,color:ORANGE}, children:[new TextRun({text:'https://benjaminchaminade.com/contact/', size:18, color:'FFFFFF', font:'Calibri'})]}));
+  html += '<div class="cta-box">';
+  html += '<p><b>Besoin d&rsquo;un accompagnement pour votre &eacute;quipe ?</b></p>';
+  html += '<p>Conf&eacute;rences &middot; Ateliers &middot; Formations &middot; Coaching</p>';
+  html += '<p><a href="https://benjaminchaminade.com/contact/">Contactez Benjamin Chaminade</a></p>';
+  html += '<p style="font-size:9pt">https://benjaminchaminade.com/contact/</p>';
+  html += '</div>';
 
   // Footer
-  children.push(new Paragraph({ alignment:AlignmentType.CENTER, spacing:{before:300}, border:{top:{style:BorderStyle.SINGLE,size:1,color:'DEE2E6'}}, children:[new TextRun({text:'Issu du livre « Management Régénératif » de Benjamin Chaminade', size:18, color:GRAY, font:'Calibri'})]}));
+  html += '<p class="footer">Issu du livre &laquo;&nbsp;Management R&eacute;g&eacute;n&eacute;ratif&nbsp;&raquo; de Benjamin Chaminade</p>';
+  html += '</body></html>';
 
-  const doc = new Document({
-    sections: [{ properties: { page: { margin: { top: 1000, right: 800, bottom: 1000, left: 800 } } }, children: children }]
-  });
+  // Generate and download as .doc
+  var blob = new Blob(['\ufeff' + html], { type: 'application/msword' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'rapport-7-crises-' + dt.replace(/\//g, '-') + '.doc';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 500);
+}
 
-  Packer.toBlob(doc).then(function(blob) {
-    saveAs(blob, 'rapport-7-crises-' + dt.replace(/\//g, '-') + '.docx');
-  }).catch(function(err) {
-    console.error('Erreur génération Word:', err);
-    alert('Erreur lors de la génération du fichier Word. Veuillez réessayer.');
-  });
+// Escape HTML entities
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 </script>
 </body>
