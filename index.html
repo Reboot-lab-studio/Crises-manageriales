@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌡️ Thermomètre des 7 Crises Managériales — Management Régénératif</title>
+<meta name="description" content="Mesurez l'exposition de votre équipe aux 7 crises managériales. Basé sur le livre Management Régénératif de Benjamin Chaminade.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌡️</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0B1120;
+  --bg-card: rgba(255,255,255,0.035);
+  --bg-card-hover: rgba(255,255,255,0.06);
+  --border-subtle: rgba(255,255,255,0.07);
+  --text-primary: #F1F3F5;
+  --text-secondary: #ADB5BD;
+  --text-muted: #6C757D;
+  --accent-orange: #FF6B35;
+  --accent-amber: #F7931E;
+  --green: #2E7D32;
+  --yellow: #F57F17;
+  --orange: #E65100;
+  --red: #C62828;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+/* Screens */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+/* Welcome */
+#welcome { align-items: center; justify-content: center; padding: 24px; }
+.welcome-box { max-width: 640px; width: 100%; text-align: center; }
+.welcome-box .icon-hero { font-size: 64px; filter: drop-shadow(0 4px 24px rgba(255,107,53,0.3)); margin-bottom: 12px; }
+.welcome-box h1 { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 800; color: var(--text-primary); margin-bottom: 6px; letter-spacing: -0.5px; }
+.welcome-box .subtitle { color: var(--text-secondary); font-size: 15px; margin-bottom: 28px; }
+.welcome-box .subtitle em { color: var(--accent-amber); font-style: normal; }
+.form-group { text-align: left; margin-bottom: 14px; }
+.form-group label { display: block; color: var(--text-muted); font-size: 12px; font-weight: 600; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-group input { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-subtle); background: rgba(255,255,255,0.04); color: var(--text-primary); font-size: 15px; font-family: inherit; outline: none; transition: border 0.2s; }
+.form-group input:focus { border-color: var(--accent-orange); }
+.form-group input::placeholder { color: var(--text-muted); }
+.card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+.stats-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 20px 0 28px; }
+.stat-item { flex: 1 1 130px; text-align: center; padding: 14px 8px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-subtle); }
+.stat-item .si-icon { font-size: 26px; }
+.stat-item .si-val { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-top: 4px; }
+.stat-item .si-sub { font-size: 11px; color: var(--text-muted); }
+.btn-primary { display: inline-block; padding: 14px 44px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent-orange), var(--accent-amber)); color: #fff; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 4px 24px rgba(255,107,53,0.3); transition: transform 0.2s, box-shadow 0.2s; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,107,53,0.4); }
+.btn-secondary { display: inline-block; padding: 10px 24px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: var(--text-secondary); font-size: 14px; font-family: inherit; cursor: pointer; transition: all 0.2s; }
+.btn-secondary:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+/* Quiz */
+#quiz { padding: 0; }
+.quiz-header { position: sticky; top: 0; z-index: 10; background: var(--bg-deep); padding: 12px 20px 0; border-bottom: 1px solid var(--border-subtle); }
+.quiz-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
+.quiz-meta .qm-left { color: var(--text-secondary); }
+.quiz-meta .qm-right { color: var(--accent-amber); font-weight: 600; }
+.progress-bar { height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; margin-bottom: 10px; }
+.progress-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
+.crisis-tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
+.crisis-tabs::-webkit-scrollbar { display: none; }
+.crisis-tab { flex: 0 0 auto; padding: 5px 11px; border-radius: 8px; border: 1px solid var(--border-subtle); background: transparent; color: var(--text-secondary); font-size: 12px; font-family: inherit; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+.crisis-tab.active { font-weight: 700; }
+.crisis-tab.done { color: var(--text-muted); }
+.quiz-body { max-width: 700px; margin: 0 auto; padding: 20px 20px 40px; }
+.crisis-banner { border-radius: 14px; padding: 18px; margin-bottom: 20px; border: 1px solid; }
+.crisis-banner .cb-top { display: flex; align-items: center; gap: 12px; }
+.crisis-banner .cb-icon { font-size: 34px; flex-shrink: 0; }
+.crisis-banner .cb-name { font-size: 19px; font-weight: 800; margin-bottom: 2px; }
+.crisis-banner .cb-sub { font-size: 13px; color: var(--text-secondary); }
+.crisis-banner .cb-desc { font-size: 13px; color: var(--text-muted); margin-top: 10px; line-height: 1.5; font-style: italic; }
+.question-card { background: var(--bg-card); border-radius: 16px; padding: 26px; border: 1px solid var(--border-subtle); }
+.qc-label { color: var(--text-muted); font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px; }
+.qc-text { min-height: 78px; display: flex; align-items: flex-start; margin-bottom: 0; }
+.qc-text p { color: var(--text-primary); font-size: 17px; line-height: 1.55; font-weight: 500; margin: 0; }
+.scale-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
+.scale-btn { flex: 1 1 100px; max-width: 130px; padding: 13px 6px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.025); color: var(--text-secondary); cursor: pointer; text-align: center; transition: all 0.2s; font-family: inherit; }
+.scale-btn:hover { background: var(--bg-card-hover); }
+.scale-btn.selected { border-width: 2px; }
+.scale-btn .sb-num { font-size: 22px; font-weight: 800; }
+.scale-btn .sb-lbl { font-size: 11px; margin-top: 1px; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 22px; gap: 10px; flex-wrap: wrap; }
+/* Results */
+#results { padding: 0 0 60px; }
+.results-header { background: linear-gradient(135deg, #131B2E, #1E293B); padding: 30px 20px; text-align: center; border-bottom: 3px solid var(--accent-orange); }
+.results-header h1 { font-family: 'Playfair Display', serif; font-size: 24px; margin: 8px 0 4px; }
+.results-body { max-width: 800px; margin: 0 auto; padding: 0 16px; }
+.profile-box { border-radius: 20px; padding: 28px; margin: 24px 0; text-align: center; border: 1px solid; }
+.profile-box .pb-emoji { font-size: 48px; }
+.profile-box .pb-label { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; }
+.profile-box .pb-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 800; color: var(--text-primary); margin: 4px 0 12px; }
+.profile-box .pb-score { font-size: 36px; font-weight: 800; }
+.profile-box .pb-max { font-size: 18px; color: var(--text-muted); }
+.profile-box .pb-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; max-width: 580px; margin: 14px auto 0; }
+.overview-bar { margin-bottom: 15px; }
+.overview-bar .ob-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.overview-bar .ob-name { font-size: 14px; font-weight: 600; color: #E9ECEF; }
+.overview-bar .ob-right { display: flex; align-items: center; gap: 8px; }
+.overview-bar .ob-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+.overview-bar .ob-score { font-size: 13px; font-weight: 700; color: var(--text-secondary); min-width: 48px; text-align: right; }
+.bar-track { height: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; overflow: hidden; }
+.bar-track .bar-inner { height: 100%; border-radius: 5px; transition: width 0.8s ease; }
+.crisis-detail { border-radius: 14px; margin-bottom: 14px; overflow: hidden; background: var(--bg-card); border: 1px solid; }
+.crisis-detail .cd-head { padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.crisis-detail .cd-head-left { display: flex; align-items: center; gap: 10px; }
+.crisis-detail .cd-head-left .cd-icon { font-size: 26px; }
+.crisis-detail .cd-head-left h4 { font-size: 15px; font-weight: 700; }
+.crisis-detail .cd-head-left .cd-sub { font-size: 12px; color: var(--text-muted); }
+.crisis-detail .cd-head-right { text-align: right; }
+.crisis-detail .cd-big-score { font-size: 22px; font-weight: 800; }
+.crisis-detail .cd-body { padding: 14px 18px; }
+.question-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; font-size: 13px; }
+.question-row .qr-dots { display: flex; gap: 3px; flex-shrink: 0; }
+.question-row .qr-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.07); }
+.question-row .qr-dot.on { background: var(--green); }
+.question-row .qr-dot.warn { background: var(--yellow); }
+.question-row .qr-dot.danger { background: var(--orange); }
+.question-row .qr-text { flex: 1; line-height: 1.35; }
+.question-row .qr-score { flex-shrink: 0; font-weight: 700; font-size: 12px; min-width: 30px; text-align: right; }
+.conseil-item { display: flex; gap: 8px; margin-bottom: 8px; font-size: 13px; line-height: 1.5; }
+.conseil-item .ci-arrow { color: #4FC3F7; flex-shrink: 0; }
+.box-livre { background: rgba(255,183,77,0.05); border-radius: 10px; padding: 14px; margin: 10px 0; border: 1px solid rgba(255,183,77,0.12); }
+.box-livre .bl-label { color: var(--accent-amber); font-size: 12px; font-weight: 700; margin-bottom: 5px; }
+.box-domino { background: rgba(255,255,255,0.015); border-radius: 10px; padding: 14px; margin: 10px 0; border: 1px solid var(--border-subtle); }
+.box-domino .bd-label { color: #EF5350; font-size: 12px; font-weight: 700; margin-bottom: 5px; }
+.plan-step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.plan-step .ps-icon { background: rgba(76,175,80,0.12); border-radius: 10px; padding: 8px 12px; font-size: 20px; flex-shrink: 0; }
+.plan-step .ps-time { color: #66BB6A; font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.plan-step .ps-text { color: #CED4DA; font-size: 13px; line-height: 1.5; }
+.cta-benjamin { background: linear-gradient(135deg, rgba(255,107,53,0.12), rgba(255,107,53,0.04)); border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid rgba(255,107,53,0.2); }
+.cta-benjamin h3 { color: #FF8A65; font-size: 16px; font-weight: 800; margin-bottom: 14px; }
+.cta-offer { background: rgba(0,0,0,0.15); border-radius: 10px; padding: 13px; margin-bottom: 10px; }
+.cta-offer .co-title { color: var(--accent-amber); font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+.cta-offer .co-desc { color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+.cta-contact-btn { display: inline-block; padding: 13px 36px; border-radius: 10px; background: linear-gradient(135deg, var(--accent-orange), var(--accent-amber)); color: #fff; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(255,107,53,0.3); transition: transform 0.2s; margin-top: 14px; }
+.cta-contact-btn:hover { transform: translateY(-2px); }
+.btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 28px 0 16px; }
+.footer-note { text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 16px; padding-bottom: 20px; }
+@media (max-width: 500px) {
+  .welcome-box h1 { font-size: 24px; }
+  .scale-btn { flex: 1 1 60px; max-width: none; padding: 10px 4px; }
+  .scale-btn .sb-num { font-size: 18px; }
+  .scale-btn .sb-lbl { font-size: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ WELCOME ============ -->
+<div id="welcome" class="screen active">
+  <div class="welcome-box">
+    <div class="icon-hero">🌡️</div>
+    <h1>Thermomètre des 7 Crises Managériales</h1>
+    <p class="subtitle">Mesurez l'exposition de votre équipe aux 7 crises qui épuisent les organisations.<br><em>Basé sur le Chapitre 2 du livre « Management Régénératif »</em></p>
+
+    <div class="card">
+      <div class="form-group">
+        <label for="inp-name">Votre prénom</label>
+        <input id="inp-name" placeholder="Ex : Sophie">
+      </div>
+      <div class="form-group">
+        <label for="inp-team">Nom de votre équipe (optionnel)</label>
+        <input id="inp-team" placeholder="Ex : Équipe Marketing">
+      </div>
+      <div class="form-group">
+        <label for="inp-size">Taille de votre équipe</label>
+        <input id="inp-size" type="number" placeholder="Ex : 8">
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-item"><div class="si-icon">📊</div><div class="si-val">49 questions</div><div class="si-sub">7 par crise</div></div>
+      <div class="stat-item"><div class="si-icon">⏱️</div><div class="si-val">10-15 min</div><div class="si-sub">de diagnostic</div></div>
+      <div class="stat-item"><div class="si-icon">🎯</div><div class="si-val">Résultats</div><div class="si-sub">détaillés + conseils</div></div>
+    </div>
+
+    <button class="btn-primary" onclick="startQuiz()">Commencer le diagnostic →</button>
+    <p style="color:var(--text-muted);font-size:12px;margin-top:18px;">Issu du livre « Management Régénératif » de Benjamin Chaminade</p>
+  </div>
+</div>
+
+<!-- ============ QUIZ ============ -->
+<div id="quiz" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-meta">
+      <span class="qm-left" id="quiz-meta-left"></span>
+      <span class="qm-right" id="quiz-meta-right"></span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="crisis-tabs" id="crisis-tabs"></div>
+  </div>
+  <div class="quiz-body">
+    <div class="crisis-banner" id="crisis-banner">
+      <div class="cb-top">
+        <span class="cb-icon" id="cb-icon"></span>
+        <div>
+          <div class="cb-name" id="cb-name"></div>
+          <div class="cb-sub" id="cb-sub"></div>
+        </div>
+      </div>
+      <div class="cb-desc" id="cb-desc"></div>
+    </div>
+    <div class="question-card">
+      <div class="qc-label" id="qc-label"></div>
+      <div class="qc-text"><p id="qc-text"></p></div>
+      <div class="scale-row" id="scale-row"></div>
+      <div class="nav-row" id="nav-row"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESULTS ============ -->
+<div id="results" class="screen">
+  <div class="results-header">
+    <div style="font-size:48px">🌡️</div>
+    <h1>Résultats du Diagnostic</h1>
+    <p id="results-meta" style="color:var(--text-secondary);font-size:14px;"></p>
+  </div>
+  <div class="results-body" id="results-body"></div>
+</div>
+
+<script>
+// =====================================================
+// DATA
+// =====================================================
+const CRISES = [
+  {
+    id:1, name:"Éco-anxiété", subtitle:"L'angoisse du futur climatique qui paralyse le présent",
+    icon:"🌍", color:"#2E7D32", lightBg:"#E8F5E9",
+    description:"Cette crise se manifeste par un sentiment de stress, d'impuissance et de culpabilité face aux enjeux environnementaux. Elle touche 70% des salariés.",
+    questions:[
+      "Des membres de mon équipe expriment de la culpabilité concernant l'impact environnemental de notre travail",
+      "Je perçois une contradiction entre les valeurs écologiques de mes collaborateurs et nos contraintes professionnelles",
+      "Un sentiment d'impuissance face aux enjeux climatiques est perceptible dans l'équipe",
+      "Les questions sur l'impact environnemental de nos projets reviennent régulièrement",
+      "J'observe des tensions dans mon équipe concernant les pratiques écologiques de l'entreprise",
+      "Certains collaborateurs remettent en question des projets pour des raisons environnementales",
+      "L'éco-anxiété affecte visiblement la motivation ou l'énergie de certains membres de l'équipe"
+    ],
+    conseils:[
+      "Créez un espace de dialogue régulier où l'éco-anxiété peut s'exprimer sans tabou — ne minimisez jamais cette souffrance",
+      "Identifiez avec votre équipe les actions concrètes à votre échelle : réduire les déplacements inutiles, optimiser les ressources",
+      "Transformez la culpabilité en créativité : lancez un « Lab Impact » où l'équipe propose des améliorations environnementales",
+      "Distinguez ce qui dépend de vous (pratiques d'équipe) de ce qui dépend de l'organisation (stratégie RSE)",
+      "Formez-vous à la Fresque du Climat en équipe pour transformer l'angoisse en compréhension puis en action"
+    ],
+    chapitreDetail:"Le Chapitre 2 détaille comment l'éco-anxiété s'infiltre dans les organisations. Le Chapitre 4 propose l'approche du « manager cultivateur » qui transforme cette anxiété en force d'action collective.",
+    dominoEffect:"L'éco-anxiété non traitée génère une perte de sens (« À quoi bon si on détruit la planète ? »), qui alimente la défiance envers une direction perçue comme inactive, puis l'épuisement moral et le désengagement."
+  },
+  {
+    id:2, name:"Perte de sens", subtitle:"Le questionnement existentiel qui vide l'énergie : « À quoi bon ? »",
+    icon:"🧭", color:"#1565C0", lightBg:"#E3F2FD",
+    description:"Cette crise se manifeste par un questionnement profond sur l'utilité du travail, un sentiment de vide, un désalignement entre valeurs personnelles et activité professionnelle.",
+    questions:[
+      "Certains membres de l'équipe expriment des doutes sur l'utilité réelle de leur travail",
+      "J'observe une difficulté croissante à expliquer le « pourquoi » de nos missions",
+      "Un sentiment de vide ou de routine sans finalité est perceptible après certains projets",
+      "Les questions du type « À quoi ça sert ? » reviennent de plus en plus souvent",
+      "Je perçois un désalignement entre les valeurs de mes collaborateurs et celles de l'entreprise",
+      "L'enthousiasme pour de nouveaux projets est notablement en baisse dans l'équipe",
+      "Certains collaborateurs semblent « faire les gestes » sans conviction ni engagement émotionnel"
+    ],
+    conseils:[
+      "Reconnectez chaque mission au bénéficiaire final : qui profite concrètement du travail de votre équipe ? Rendez cet impact visible",
+      "Organisez un « atelier raison d'être » pour co-construire le sens collectif — ne l'imposez jamais d'en haut",
+      "Créez des « ponts de sens » : invitez des clients ou bénéficiaires à témoigner devant votre équipe",
+      "Permettez à chacun de consacrer 10% de son temps à un projet porteur de sens personnel",
+      "Questionnez votre propre rapport au sens : un manager qui doute en silence transmet inconsciemment cette crise"
+    ],
+    chapitreDetail:"Le Chapitre 2 explore comment la perte de sens est le symptôme d'un désalignement systémique. Les Chapitres 9 et 10 proposent des approches temporelles pour recréer du sens authentique.",
+    dominoEffect:"La perte de sens amplifie la défiance (« Si ça n'a pas de sens, c'est qu'on nous ment »), accélère le désengagement et peut provoquer l'épuisement moral."
+  },
+  {
+    id:3, name:"Défiance", subtitle:"L'effondrement de la confiance envers la hiérarchie et l'organisation",
+    icon:"🛡️", color:"#C62828", lightBg:"#FFEBEE",
+    description:"Cette crise se manifeste par une méfiance envers la hiérarchie, un cynisme managérial, une rétention d'information, un sentiment de promesses non tenues.",
+    questions:[
+      "Je perçois que mes collaborateurs doutent des intentions réelles de la direction",
+      "Un écart visible entre les discours officiels et la réalité quotidienne est régulièrement pointé",
+      "J'observe de la rétention d'information par prudence ou par protection chez certains",
+      "La méfiance envers les promesses de la hiérarchie est palpable dans l'équipe",
+      "Du cynisme s'exprime ouvertement lors des réunions ou des annonces de la direction",
+      "Certains collaborateurs se sentent trahis par des décisions organisationnelles récentes",
+      "Les valeurs affichées par l'entreprise sont perçues comme déconnectées de la réalité"
+    ],
+    conseils:[
+      "Pratiquez la transparence radicale : partagez les informations dont vous disposez, y compris vos propres doutes",
+      "Tenez vos promesses ou expliquez pourquoi vous ne pouvez pas — chaque promesse non tenue détruit plus de confiance que 10 tenues n'en construisent",
+      "Créez un « baromètre de confiance » anonyme mensuel et partagez les résultats, même inconfortables",
+      "Distinguez votre rôle de manager de celui de porte-parole de la direction",
+      "Instaurez un rituel « Questions sans filtre » avec l'engagement d'une réponse honnête"
+    ],
+    chapitreDetail:"Le Chapitre 2 analyse les mécanismes de l'effondrement de la confiance. Le Chapitre 12 propose les 6 principes du management régénératif dont la « transparence nourricière ».",
+    dominoEffect:"La défiance génère de l'isolement (chacun se protège), de l'épuisement (l'énergie dépensée à se méfier est considérable) et du désengagement."
+  },
+  {
+    id:4, name:"Obsolescence", subtitle:"La peur du déclassement face à l'IA et aux mutations technologiques",
+    icon:"🤖", color:"#6A1B9A", lightBg:"#F3E5F5",
+    description:"Cette crise se manifeste par l'angoisse face à l'IA, le sentiment que ses compétences deviennent périmées, la peur d'être « remplacé ».",
+    questions:[
+      "Certains membres de l'équipe expriment la crainte que leurs compétences deviennent obsolètes",
+      "La montée de l'intelligence artificielle génère de l'anxiété visible dans l'équipe",
+      "Des collaborateurs ont du mal à suivre les évolutions technologiques de leur métier",
+      "Je perçois un doute chez certains quant à leur valeur sur le marché du travail",
+      "Les opportunités de formation sont perçues comme insuffisantes ou inadaptées",
+      "Certains adoptent une posture de résistance face aux nouveaux outils ou méthodes",
+      "Le sentiment de « ne plus être à la page » affecte la confiance en soi de certains"
+    ],
+    conseils:[
+      "Dédramatisez l'IA en organisant des sessions pratiques de découverte : la peur naît de l'inconnu",
+      "Identifiez les compétences « irremplaçables » : créativité, empathie, jugement éthique",
+      "Créez un « plan d'apprentissage vivant » co-construit et actualisé trimestriellement",
+      "Valorisez explicitement l'expérience et la sagesse professionnelle",
+      "Instaurez le « mentorat croisé » : seniors transmettent l'expertise, juniors partagent le digital"
+    ],
+    chapitreDetail:"Le Chapitre 2 décortique la crise d'obsolescence. Le Chapitre 8 (économie circulaire des compétences) et le Chapitre 11 (management éco-responsable) proposent des approches concrètes.",
+    dominoEffect:"L'obsolescence génère de l'éco-anxiété technologique, amplifie l'épuisement et peut provoquer un désengagement défensif."
+  },
+  {
+    id:5, name:"Épuisement", subtitle:"La fatigue chronique normalisée, le burnout latent généralisé",
+    icon:"🔋", color:"#E65100", lightBg:"#FFF3E0",
+    description:"Cette crise se manifeste par une fatigue chronique devenue « normale », une impossibilité de récupérer, des symptômes physiques et émotionnels liés au stress.",
+    questions:[
+      "Des collaborateurs arrivent visiblement fatigués au travail de manière récurrente",
+      "L'équipe ne semble pas récupérer suffisamment entre les périodes de charge",
+      "Je perçois des symptômes physiques liés au stress chez certains (maux de tête, dos, insomnie)",
+      "La charge de travail est considérée comme « normale » alors qu'elle est objectivement excessive",
+      "Certains collaborateurs négligent leur santé par manque de temps",
+      "Le sentiment d'être vidé émotionnellement après une journée de travail est fréquemment exprimé",
+      "Les arrêts maladie ou les signes de fragilité se multiplient dans l'équipe"
+    ],
+    conseils:[
+      "URGENCE : Si plusieurs collaborateurs présentent des signes de burnout, activez immédiatement les dispositifs de prévention",
+      "Auditez la charge réelle : demandez à chacun de lister tout ce qu'il fait pendant une semaine",
+      "Protégez les temps de récupération : pas de mails après 19h, vraies pauses déjeuner",
+      "Distinguez « occupé » de « productif » : supprimez réunions inutiles et reportings superflus",
+      "Montrez l'exemple : un manager épuisé donne la permission à l'équipe de s'épuiser"
+    ],
+    chapitreDetail:"Le Chapitre 2 révèle comment l'épuisement est devenu un « bruit de fond » normalisé. Le Chapitre 5 (biomimétisme) s'inspire des cycles naturels pour des rythmes régénératifs.",
+    dominoEffect:"L'épuisement est le carrefour de toutes les crises : alimenté par toutes les autres, il les amplifie toutes. C'est souvent la crise à traiter en premier."
+  },
+  {
+    id:6, name:"Isolement", subtitle:"La solitude professionnelle, la fragmentation du collectif",
+    icon:"🏝️", color:"#00838F", lightBg:"#E0F7FA",
+    description:"Cette crise se manifeste par une fragmentation du collectif, un télétravail mal vécu, des silos organisationnels, une perte du sentiment d'appartenance.",
+    questions:[
+      "Certains collaborateurs semblent seuls face à leurs problèmes professionnels",
+      "Les échanges informels (pauses café, déjeuners) ont significativement diminué",
+      "Le travail en silo s'est installé, avec peu de collaboration entre sous-groupes",
+      "Le télétravail ou le mode hybride a dégradé les relations au sein de l'équipe",
+      "Le sentiment d'appartenance à l'équipe s'est affaibli ces derniers mois",
+      "Les moments de convivialité et de connexion humaine ont disparu ou sont artificiels",
+      "Certains membres se sentent « invisibles » ou peu considérés dans l'organisation"
+    ],
+    conseils:[
+      "Réinstaurez des rituels de connexion authentiques — pas des team buildings forcés, mais des moments volontaires",
+      "Repensez le télétravail : quelles journées en commun ? Pour quoi faire ? Avec quelles règles co-construites ?",
+      "Créez des « binômes d'entraide » rotatifs mensuels",
+      "Rendez l'invisible visible : célébrez les contributions de chacun, nommez les apports individuels",
+      "Organisez des « cafés sans agenda » de 20 minutes où l'on parle de tout sauf du travail"
+    ],
+    chapitreDetail:"Le Chapitre 2 analyse comment l'isolement s'est intensifié. Le Chapitre 6 (permaculture organisationnelle) propose le concept de « zones de proximité ». Le Chapitre 10 offre des rituels concrets.",
+    dominoEffect:"L'isolement crée un terreau fertile pour le désengagement, amplifie l'épuisement (on s'épuise plus vite seul) et aggrave la perte de sens."
+  },
+  {
+    id:7, name:"Désengagement", subtitle:"Le quiet quitting, la démission silencieuse, le retrait émotionnel",
+    icon:"🚪", color:"#37474F", lightBg:"#ECEFF1",
+    description:"Cette crise se manifeste par le « quiet quitting », une présence minimale, un retrait émotionnel, un service minimum assumé, une démission intérieure.",
+    questions:[
+      "Certains collaborateurs font visiblement le strict minimum requis, sans plus",
+      "La prise d'initiative a nettement diminué dans l'équipe",
+      "Je détecte une forme de « présence absente » : physiquement là, mentalement ailleurs",
+      "L'investissement émotionnel dans les projets a chuté de manière notable",
+      "Des collaborateurs refusent systématiquement les responsabilités supplémentaires",
+      "Le comptage des heures et l'attente du week-end sont devenus des sujets récurrents",
+      "Je perçois une indifférence croissante face aux résultats de l'équipe ou de l'entreprise"
+    ],
+    conseils:[
+      "Ne blâmez jamais un collaborateur désengagé : le désengagement est un symptôme, pas une cause",
+      "Ouvrez un dialogue individuel sincère : « J'ai l'impression que quelque chose a changé. Comment puis-je t'aider ? »",
+      "Redonnez de l'autonomie et du pouvoir de décision : le micro-management est le premier facteur de désengagement",
+      "Proposez des missions transverses ou des projets « passion »",
+      "Acceptez que certains désengagements sont légitimes : c'est parfois l'organisation qui doit changer"
+    ],
+    chapitreDetail:"Le Chapitre 2 déconstruit le mythe du « collaborateur fainéant ». Les Chapitres 9 à 11 (les 3 temporalités) offrent un cadre complet pour ré-engager durablement.",
+    dominoEffect:"Le désengagement est souvent le stade terminal de l'effet domino. C'est le signal que le système managérial a échoué. Mais c'est aussi une opportunité : traiter les crises en amont peut inverser le processus."
+  }
+];
+
+const SCALE = [
+  {value:1, label:"Jamais"},
+  {value:2, label:"Rarement"},
+  {value:3, label:"Parfois"},
+  {value:4, label:"Souvent"},
+  {value:5, label:"Très souvent"}
+];
+
+// =====================================================
+// TEAM PROFILES (not manager profiles)
+// =====================================================
+function getTeamProfile(total) {
+  if (total <= 70) return {name:"L'Équipe Florissante", emoji:"🌱", color:"#2E7D32", desc:"Votre équipe présente un écosystème globalement sain. Les crises sont présentes à un niveau faible et ne forment pas de cercle vicieux. Continuez à cultiver ce qui fonctionne et restez vigilant sur les signaux faibles."};
+  if (total <= 120) return {name:"L'Équipe en Alerte", emoji:"⚡", color:"#F57F17", desc:"Des signaux d'alerte apparaissent au sein de votre équipe. Le collectif tient encore, mais sans action, les crises risquent de s'amplifier mutuellement. C'est le moment idéal pour agir : les transformations sont plus faciles avant que les crises ne s'installent."};
+  if (total <= 170) return {name:"L'Équipe sous Tension", emoji:"🔗", color:"#E65100", desc:"Plusieurs crises sont installées dans votre équipe et commencent à s'alimenter mutuellement. L'effet domino est en cours. Une intervention structurée est nécessaire, en commençant par la crise « pivot ». Le management régénératif est une réponse adaptée à cette situation."};
+  return {name:"L'Équipe en Urgence", emoji:"🌊", color:"#C62828", desc:"Votre équipe est en souffrance généralisée. Les crises se renforcent mutuellement dans un cercle vicieux. Une action immédiate est nécessaire, en priorisant l'épuisement, puis les crises relationnelles. Un accompagnement externe est fortement recommandé."};
+}
+
+function getCrisisLevel(score) {
+  if (score <= 14) return {level:"Faible", color:"#2E7D32", emoji:"🟢", action:"Vigilance"};
+  if (score <= 21) return {level:"Modéré", color:"#F57F17", emoji:"🟡", action:"Attention"};
+  if (score <= 28) return {level:"Fort", color:"#E65100", emoji:"🟠", action:"Action rapide"};
+  return {level:"Critique", color:"#C62828", emoji:"🔴", action:"Urgence"};
+}
+
+// =====================================================
+// STATE
+// =====================================================
+let state = {
+  currentCrisis: 0,
+  currentQuestion: 0,
+  answers: {},
+};
+
+const totalQ = CRISES.reduce((a,c) => a + c.questions.length, 0);
+
+function answeredCount() { return Object.keys(state.answers).length; }
+function getAnswer(ci, qi) { return state.answers[ci+'-'+qi]; }
+function setAnswer(ci, qi, val) { state.answers[ci+'-'+qi] = val; }
+
+// =====================================================
+// NAVIGATION
+// =====================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function startQuiz() {
+  state.currentCrisis = 0;
+  state.currentQuestion = 0;
+  state.answers = {};
+  showScreen('quiz');
+  renderQuiz();
+}
+
+function goTo(ci, qi) {
+  state.currentCrisis = ci;
+  state.currentQuestion = qi;
+  renderQuiz();
+}
+
+function goPrev() {
+  if (state.currentQuestion > 0) state.currentQuestion--;
+  else if (state.currentCrisis > 0) { state.currentCrisis--; state.currentQuestion = CRISES[state.currentCrisis].questions.length - 1; }
+  renderQuiz();
+}
+
+function goNext() {
+  const c = CRISES[state.currentCrisis];
+  if (state.currentQuestion < c.questions.length - 1) state.currentQuestion++;
+  else if (state.currentCrisis < CRISES.length - 1) { state.currentCrisis++; state.currentQuestion = 0; }
+  renderQuiz();
+}
+
+function handleAnswer(val) {
+  setAnswer(state.currentCrisis, state.currentQuestion, val);
+  setTimeout(() => {
+    const c = CRISES[state.currentCrisis];
+    if (state.currentQuestion < c.questions.length - 1) state.currentQuestion++;
+    else if (state.currentCrisis < CRISES.length - 1) { state.currentCrisis++; state.currentQuestion = 0; }
+    else { showScreen('results'); renderResults(); return; }
+    renderQuiz();
+  }, 250);
+}
+
+// =====================================================
+// RENDER QUIZ
+// =====================================================
+function renderQuiz() {
+  const ci = state.currentCrisis;
+  const qi = state.currentQuestion;
+  const crisis = CRISES[ci];
+  const question = crisis.questions[qi];
+  const current = getAnswer(ci, qi);
+  const answered = answeredCount();
+  const pct = (answered / totalQ) * 100;
+
+  // Meta
+  document.getElementById('quiz-meta-left').textContent = `Crise ${ci+1}/7 — Question ${qi+1}/${crisis.questions.length}`;
+  document.getElementById('quiz-meta-right').textContent = `${answered}/${totalQ} réponses`;
+
+  // Progress
+  const fill = document.getElementById('progress-fill');
+  fill.style.width = pct + '%';
+  fill.style.background = `linear-gradient(90deg, ${crisis.color}, var(--accent-amber))`;
+
+  // Tabs
+  let tabs = '';
+  CRISES.forEach((c, i) => {
+    const done = c.questions.every((_,q) => getAnswer(i,q) !== undefined);
+    const act = i === ci ? ' active' : '';
+    const dn = done ? ' done' : '';
+    const style = i === ci ? `border-color:${c.color};background:${c.color}18;color:${c.color}` : '';
+    tabs += `<button class="crisis-tab${act}${dn}" style="${style}" onclick="goTo(${i},0)">${c.icon} ${c.name}${done?' ✓':''}</button>`;
+  });
+  document.getElementById('crisis-tabs').innerHTML = tabs;
+
+  // Banner
+  const banner = document.getElementById('crisis-banner');
+  banner.style.background = `linear-gradient(135deg, ${crisis.color}12, ${crisis.color}06)`;
+  banner.style.borderColor = crisis.color + '30';
+  document.getElementById('cb-icon').textContent = crisis.icon;
+  document.getElementById('cb-name').innerHTML = `<span style="color:${crisis.color}">Crise ${crisis.id} : ${crisis.name}</span>`;
+  document.getElementById('cb-sub').textContent = crisis.subtitle;
+  document.getElementById('cb-desc').textContent = qi === 0 ? crisis.description : '';
+  document.getElementById('cb-desc').style.display = qi === 0 ? 'block' : 'none';
+
+  // Question
+  document.getElementById('qc-label').textContent = `Question ${qi+1} sur ${crisis.questions.length}`;
+  document.getElementById('qc-text').textContent = question;
+
+  // Scale
+  let scale = '';
+  SCALE.forEach(s => {
+    const sel = current === s.value;
+    const border = sel ? `border:2px solid ${crisis.color}` : '';
+    const bg = sel ? `background:${crisis.color}22` : '';
+    const col = sel ? `color:${crisis.color}` : '';
+    scale += `<button class="scale-btn${sel?' selected':''}" style="${border};${bg};${col}" onclick="handleAnswer(${s.value})"><div class="sb-num">${s.value}</div><div class="sb-lbl">${s.label}</div></button>`;
+  });
+  document.getElementById('scale-row').innerHTML = scale;
+
+  // Nav
+  let nav = `<button class="btn-secondary" onclick="goPrev()">← Précédent</button>`;
+  if (answered === totalQ) nav += `<button class="btn-primary" style="padding:10px 28px;font-size:14px" onclick="showScreen('results');renderResults()">Voir les résultats →</button>`;
+  nav += `<button class="btn-secondary" onclick="goNext()">Suivant →</button>`;
+  document.getElementById('nav-row').innerHTML = nav;
+}
+
+// =====================================================
+// RENDER RESULTS
+// =====================================================
+function getScores() {
+  return CRISES.map((c,ci) => {
+    let total = 0;
+    c.questions.forEach((_,qi) => { total += (getAnswer(ci,qi) || 0); });
+    return {...c, score: total, maxScore: c.questions.length * 5, crisisIndex: ci};
+  });
+}
+
+function renderResults() {
+  const scores = getScores();
+  const totalScore = scores.reduce((a,s) => a + s.score, 0);
+  const maxTotal = scores.reduce((a,s) => a + s.maxScore, 0);
+  const profile = getTeamProfile(totalScore);
+  const sorted = [...scores].sort((a,b) => b.score - a.score);
+  const topCrises = sorted.filter(c => c.score > 14);
+  const pivot = sorted[0];
+
+  const name = document.getElementById('inp-name').value || 'Manager';
+  const team = document.getElementById('inp-team').value;
+  const size = document.getElementById('inp-size').value;
+  const date = new Date().toLocaleDateString('fr-FR');
+
+  document.getElementById('results-meta').textContent = `${name}${team ? ' — '+team : ''}${size ? ' ('+size+' personnes)' : ''} — ${date}`;
+
+  let h = '';
+
+  // Profile
+  h += `<div class="profile-box" style="background:linear-gradient(135deg,${profile.color}14,${profile.color}06);border-color:${profile.color}40">
+    <div class="pb-emoji">${profile.emoji}</div>
+    <div class="pb-label" style="color:${profile.color}">Profil de votre équipe</div>
+    <div class="pb-name">${profile.name}</div>
+    <div class="pb-score" style="color:${profile.color}">${totalScore} <span class="pb-max">/ ${maxTotal}</span></div>
+    <div style="height:8px;background:rgba(255,255,255,0.06);border-radius:4px;max-width:400px;margin:12px auto 0;overflow:hidden"><div style="height:100%;width:${(totalScore/maxTotal)*100}%;background:linear-gradient(90deg,#2E7D32,#F57F17,#E65100,#C62828);border-radius:4px"></div></div>
+    <div class="pb-desc">${profile.desc}</div>
+  </div>`;
+
+  // Overview
+  h += `<div class="card"><h3 style="font-size:17px;font-weight:700;margin-bottom:18px">📊 Vue d'ensemble des 7 crises</h3>`;
+  scores.forEach(c => {
+    const lv = getCrisisLevel(c.score);
+    const pct = (c.score / c.maxScore) * 100;
+    h += `<div class="overview-bar">
+      <div class="ob-top"><span class="ob-name">${c.icon} ${c.name}</span><span class="ob-right"><span class="ob-badge" style="color:${lv.color};background:${lv.color}18">${lv.level}</span><span class="ob-score">${c.score}/${c.maxScore}</span></span></div>
+      <div class="bar-track"><div class="bar-inner" style="width:${pct}%;background:linear-gradient(90deg,${c.color}88,${c.color})"></div></div>
+    </div>`;
+  });
+  h += `</div>`;
+
+  // Pivot
+  if (pivot.score > 14) {
+    h += `<div style="background:linear-gradient(135deg,${pivot.color}12,${pivot.color}04);border-radius:16px;padding:22px;margin-bottom:20px;border:2px solid ${pivot.color}40">
+      <h3 style="color:${pivot.color};font-size:16px;font-weight:800;margin-bottom:8px">🎯 Crise « pivot » de votre équipe : ${pivot.icon} ${pivot.name}</h3>
+      <p style="color:#CED4DA;font-size:14px;line-height:1.6;margin-bottom:12px">La crise pivot est celle qui obtient le score le plus élevé. C'est souvent celle qui alimente les autres par effet domino. En la traitant en priorité, vous obtiendrez un impact positif sur l'ensemble de l'écosystème de votre équipe.</p>
+      <div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:14px"><div style="color:var(--accent-amber);font-size:12px;font-weight:700;margin-bottom:5px">EFFET DOMINO</div><p style="color:var(--text-secondary);font-size:13px;line-height:1.6;margin:0">${pivot.dominoEffect}</p></div>
+    </div>`;
+  }
+
+  // Detail
+  h += `<h3 style="font-size:19px;font-weight:800;margin:28px 0 14px">📋 Analyse détaillée par crise</h3>`;
+  sorted.forEach(c => {
+    const lv = getCrisisLevel(c.score);
+    const pct = (c.score / c.maxScore) * 100;
+    h += `<div class="crisis-detail" style="border-color:${c.color}30">`;
+    h += `<div class="cd-head" style="background:linear-gradient(135deg,${c.color}18,${c.color}06)">
+      <div class="cd-head-left"><span class="cd-icon">${c.icon}</span><div><h4>${c.name}</h4><div class="cd-sub">${c.subtitle}</div></div></div>
+      <div class="cd-head-right"><div class="cd-big-score" style="color:${lv.color}">${c.score}<span style="font-size:14px;color:var(--text-muted)">/${c.maxScore}</span></div><span class="ob-badge" style="color:${lv.color};background:${lv.color}18;display:inline-block;padding:2px 10px;border-radius:6px;font-size:11px;font-weight:700">${lv.emoji} ${lv.level} — ${lv.action}</span></div>
+    </div>`;
+    h += `<div class="cd-body">`;
+    h += `<div class="bar-track" style="margin-bottom:14px"><div class="bar-inner" style="width:${pct}%;background:${c.color}"></div></div>`;
+
+    // Questions
+    h += `<div style="color:var(--text-muted);font-size:11px;font-weight:700;letter-spacing:0.5px;margin-bottom:8px">DÉTAIL DES RÉPONSES</div>`;
+    c.questions.forEach((q, qi) => {
+      const val = getAnswer(c.crisisIndex, qi) || 0;
+      let dotClass = val >= 4 ? 'danger' : val >= 3 ? 'warn' : 'on';
+      let dots = '';
+      for (let v = 1; v <= 5; v++) dots += `<div class="qr-dot${v <= val ? ' '+dotClass : ''}"></div>`;
+      const textCol = val >= 4 ? 'var(--accent-amber)' : 'var(--text-muted)';
+      const scoreCol = val >= 4 ? '#FF8A65' : 'var(--text-muted)';
+      h += `<div class="question-row"><div class="qr-dots">${dots}</div><span class="qr-text" style="color:${textCol}">${q}</span><span class="qr-score" style="color:${scoreCol}">${val}/5</span></div>`;
+    });
+
+    // Conseils
+    if (c.score > 14) {
+      h += `<div style="background:rgba(255,255,255,0.025);border-radius:12px;padding:14px;margin:14px 0"><div style="color:#4FC3F7;font-size:12px;font-weight:700;margin-bottom:8px">💡 CONSEILS POUR AGIR</div>`;
+      c.conseils.forEach(co => { h += `<div class="conseil-item"><span class="ci-arrow">→</span><span style="color:#CED4DA">${co}</span></div>`; });
+      h += `</div>`;
+    }
+
+    h += `<div class="box-livre"><div class="bl-label">📖 DANS LE LIVRE « MANAGEMENT RÉGÉNÉRATIF »</div><p style="color:var(--text-secondary);font-size:13px;line-height:1.5;margin:0">${c.chapitreDetail}</p></div>`;
+    h += `<div class="box-domino"><div class="bd-label">⚡ EFFET DOMINO</div><p style="color:var(--text-muted);font-size:13px;line-height:1.5;margin:0">${c.dominoEffect}</p></div>`;
+    h += `</div></div>`;
+  });
+
+  // Plan
+  const planWeek = pivot.score > 21 ? `Traitez en urgence la crise « ${pivot.name} » : ouvrez un dialogue individuel avec chaque membre de votre équipe sur ce sujet.` : 'Partagez ces résultats avec une personne de confiance et définissez votre première priorité.';
+  const planMonth = topCrises.length > 0 ? `Concentrez-vous sur les crises prioritaires : ${topCrises.slice(0,2).map(c=>c.name).join(' et ')}. Mettez en place les 2 premiers conseils de chaque crise.` : 'Maintenez votre vigilance et approfondissez votre compréhension avec la lecture du Chapitre 2.';
+  h += `<div style="background:linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02));border-radius:16px;padding:22px;margin:24px 0 14px;border:1px solid rgba(76,175,80,0.2)">
+    <h3 style="color:#66BB6A;font-size:17px;font-weight:800;margin-bottom:14px">🚀 Plan d'action recommandé pour votre équipe</h3>
+    <div class="plan-step"><div class="ps-icon">⚡</div><div><div class="ps-time">Cette semaine</div><div class="ps-text">${planWeek}</div></div></div>
+    <div class="plan-step"><div class="ps-icon">🎯</div><div><div class="ps-time">Ce mois</div><div class="ps-text">${planMonth}</div></div></div>
+    <div class="plan-step"><div class="ps-icon">📈</div><div><div class="ps-time">Ce trimestre</div><div class="ps-text">Déployez les feuilles de route du Management Régénératif correspondant aux crises de votre équipe. Refaites ce diagnostic dans 3 mois pour mesurer la progression.</div></div></div>
+  </div>`;
+
+  // CTA Benjamin
+  h += `<div class="cta-benjamin">
+    <h3>🤝 Comment Benjamin Chaminade peut accompagner votre équipe</h3>
+    <div class="cta-offer"><div class="co-title">Conférence « Management Régénératif »</div><div class="co-desc">Sensibilisez votre COMEX ou vos managers avec une conférence inspirante de 1h à 2h sur les 7 crises et le management régénératif.</div></div>
+    <div class="cta-offer"><div class="co-title">Atelier de diagnostic collectif</div><div class="co-desc">Animez un atelier de 3h avec votre équipe pour cartographier collectivement les crises et co-construire les premières solutions.</div></div>
+    <div class="cta-offer"><div class="co-title">Programme de transformation</div><div class="co-desc">Déployez les feuilles de route du Management Régénératif sur 3 à 12 mois avec un accompagnement personnalisé.</div></div>
+    <div class="cta-offer"><div class="co-title">Formation certifiante</div><div class="co-desc">Formez vos managers aux principes et outils du management régénératif avec un parcours certifiant incluant les 42 feuilles de route.</div></div>
+    <div style="text-align:center;margin-top:6px"><a href="https://benjaminchaminade.com/contact/" target="_blank" rel="noopener" class="cta-contact-btn">→ Contactez Benjamin Chaminade ←</a><p style="color:var(--text-muted);font-size:12px;margin-top:8px">benjaminchaminade.com/contact</p></div>
+  </div>`;
+
+  // Buttons
+  h += `<div class="btn-row">
+    <button class="btn-secondary" onclick="showScreen('welcome')">🔄 Recommencer</button>
+    <button class="btn-primary" style="padding:12px 28px;font-size:14px" onclick="downloadReport()">📄 Télécharger le rapport</button>
+  </div>`;
+  h += `<p class="footer-note">Issu du livre « Management Régénératif » de Benjamin Chaminade</p>`;
+
+  document.getElementById('results-body').innerHTML = h;
+}
+
+// =====================================================
+// DOWNLOAD REPORT (HTML file user opens then prints as PDF)
+// =====================================================
+function downloadReport() {
+  const scores = getScores();
+  const totalScore = scores.reduce((a,s) => a + s.score, 0);
+  const maxTotal = scores.reduce((a,s) => a + s.maxScore, 0);
+  const profile = getTeamProfile(totalScore);
+  const sorted = [...scores].sort((a,b) => b.score - a.score);
+  const topCrises = sorted.filter(c => c.score > 14);
+  const pivot = sorted[0];
+
+  const nm = document.getElementById('inp-name').value || 'Manager';
+  const tm = document.getElementById('inp-team').value;
+  const sz = document.getElementById('inp-size').value;
+  const dt = new Date().toLocaleDateString('fr-FR');
+
+  let r = `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Rapport - Thermomètre des 7 Crises Managériales</title><style>
+body{font-family:Segoe UI,system-ui,sans-serif;max-width:780px;margin:0 auto;padding:36px 28px;color:#1a1a2e;line-height:1.6;font-size:13.5px}
+h1{color:#1B4F72;font-size:22px;text-align:center;border-bottom:3px solid #FF6B35;padding-bottom:12px}
+h2{color:#2C3E50;font-size:16px;margin-top:26px;border-left:4px solid #FF6B35;padding-left:12px}
+h3{color:#1B4F72;font-size:14px;margin-top:14px}
+.sb{background:#f8f9fa;border-radius:12px;padding:20px;margin:16px 0;text-align:center;border:2px solid #dee2e6}
+.big{font-size:36px;font-weight:800;color:#1B4F72}
+.bar{height:11px;background:#e9ecef;border-radius:6px;margin:7px 0;overflow:hidden}
+.bf{height:100%;border-radius:6px}
+.cc{border:1px solid #dee2e6;border-radius:10px;padding:16px;margin:12px 0;page-break-inside:avoid}
+.co{padding:5px 0 5px 14px;border-left:3px solid #4FC3F7;margin:7px 0;font-size:13px}
+.m{color:#6c757d;font-size:12px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+td,th{border:1px solid #dee2e6;padding:7px 10px;text-align:left}
+th{background:#f8f9fa;font-weight:700}
+.cta{background:linear-gradient(135deg,#FF6B35,#F7931E);color:white;border-radius:12px;padding:22px;margin:28px 0;text-align:center;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cta a{color:white;font-weight:700;font-size:17px;text-decoration:underline}
+@media print{body{padding:18px}}
+</style></head><body>`;
+
+  r += `<h1>🌡️ Thermomètre des 7 Crises Managériales</h1>`;
+  r += `<p class="m">${nm}${tm?' — '+tm:''}${sz?' ('+sz+' pers.)':''} — ${dt}</p>`;
+  r += `<div class="sb"><div style="font-size:12px;color:#6c757d;text-transform:uppercase;letter-spacing:2px">Profil de l'équipe : ${profile.emoji} ${profile.name}</div><div class="big">${totalScore} / ${maxTotal}</div><p style="font-size:13px;color:#495057;max-width:560px;margin:10px auto 0">${profile.desc}</p></div>`;
+
+  r += `<h2>📊 Vue d'ensemble</h2><table><tr><th>Crise</th><th style="text-align:center">Score</th><th style="text-align:center">Niveau</th><th>Action</th></tr>`;
+  sorted.forEach(c => { const lv = getCrisisLevel(c.score); r += `<tr><td><strong>${c.icon} ${c.name}</strong></td><td style="text-align:center"><strong>${c.score}/${c.maxScore}</strong></td><td style="text-align:center">${lv.emoji} ${lv.level}</td><td>${lv.action}</td></tr>`; });
+  r += `</table>`;
+
+  if (pivot.score > 14) r += `<h2>🎯 Crise pivot : ${pivot.icon} ${pivot.name}</h2><p>${pivot.dominoEffect}</p>`;
+
+  sorted.forEach(c => {
+    const lv = getCrisisLevel(c.score);
+    r += `<div class="cc"><h2 style="border:0;padding:0;margin:0 0 6px">${c.icon} ${c.name} — <span style="color:${lv.color}">${c.score}/${c.maxScore} (${lv.level})</span></h2>`;
+    r += `<p style="font-size:12px;color:#6c757d;margin:0 0 8px;font-style:italic">${c.subtitle}</p>`;
+    r += `<div class="bar"><div class="bf" style="width:${(c.score/c.maxScore)*100}%;background:${c.color}"></div></div>`;
+    r += `<h3>Détail des réponses</h3><table><tr><th style="width:82%">Question</th><th style="width:18%;text-align:center">Score</th></tr>`;
+    c.questions.forEach((q,qi) => { const v = getAnswer(c.crisisIndex,qi)||0; r += `<tr style="${v>=4?'background:#fff3e0':''}"><td>${q}</td><td style="text-align:center;font-weight:700">${v}/5</td></tr>`; });
+    r += `</table>`;
+    if (c.score > 14) { r += `<h3>💡 Conseils pour agir</h3>`; c.conseils.forEach(co => { r += `<div class="co">${co}</div>`; }); }
+    r += `<h3>📖 Dans le livre</h3><p style="font-size:13px;color:#495057">${c.chapitreDetail}</p>`;
+    r += `<h3>⚡ Effet domino</h3><p style="font-size:13px;color:#495057">${c.dominoEffect}</p></div>`;
+  });
+
+  r += `<h2>🚀 Plan d'action pour l'équipe</h2>`;
+  r += `<p><strong>⚡ Cette semaine :</strong> ${pivot.score>21?'Traitez en urgence la crise « '+pivot.name+' ».':'Définissez votre première priorité.'}</p>`;
+  r += `<p><strong>🎯 Ce mois :</strong> ${topCrises.length>0?'Concentrez-vous sur : '+topCrises.slice(0,2).map(c=>c.name).join(' et ')+'.':'Maintenez votre vigilance.'}</p>`;
+  r += `<p><strong>📈 Ce trimestre :</strong> Déployez les feuilles de route. Refaites ce diagnostic dans 3 mois.</p>`;
+
+  r += `<div class="cta"><p style="margin:0 0 6px;font-size:14px">🤝 Besoin d'un accompagnement pour votre équipe ?</p><p style="margin:0 0 10px;font-size:13px;opacity:0.9">Conférences · Ateliers · Formations · Coaching</p><a href="https://benjaminchaminade.com/contact/">Contactez Benjamin Chaminade</a><p style="margin:6px 0 0;font-size:12px;opacity:0.8">https://benjaminchaminade.com/contact/</p></div>`;
+  r += `<p class="m" style="margin-top:24px;border-top:1px solid #dee2e6;padding-top:12px">Issu du livre « Management Régénératif » de Benjamin Chaminade<br><strong>Pour imprimer en PDF :</strong> ouvrez ce fichier dans votre navigateur puis Ctrl+P (ou ⌘+P) → « Enregistrer en PDF »</p>`;
+  r += `</body></html>`;
+
+  const blob = new Blob([r], {type:'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'rapport-7-crises-'+dt.replace(/\//g,'-')+'.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
