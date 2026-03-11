@@ -180,7 +180,7 @@ body {
     </div>
 
     <div class="stats-row">
-      <div class="stat-item"><div class="si-icon">📊</div><div class="si-val">49 questions</div><div class="si-sub">7 par crise</div></div>
+      <div class="stat-item"><div class="si-icon">📊</div><div class="si-val">70 questions</div><div class="si-sub">10 par crise</div></div>
       <div class="stat-item"><div class="si-icon">⏱️</div><div class="si-val">10-15 min</div><div class="si-sub">de diagnostic</div></div>
       <div class="stat-item"><div class="si-icon">🎯</div><div class="si-val">Résultats</div><div class="si-sub">détaillés + conseils</div></div>
     </div>
@@ -246,14 +246,17 @@ const CRISES = [
       "Les questions sur l'impact environnemental de nos projets reviennent régulièrement",
       "J'observe des tensions dans mon équipe concernant les pratiques écologiques de l'entreprise",
       "Certains collaborateurs remettent en question des projets pour des raisons environnementales",
-      "L'éco-anxiété affecte visiblement la motivation ou l'énergie de certains membres de l'équipe"
+      "L'éco-anxiété affecte visiblement la motivation ou l'énergie de certains membres de l'équipe",
+      "Des collaborateurs évoquent le sentiment de travailler « à contre-courant » de leurs convictions environnementales",
+      "La RSE de l'entreprise est perçue comme insuffisante ou cosmétique par une partie de l'équipe",
+      "Il m'est difficile de répondre aux préoccupations climatiques de mon équipe sans me sentir impuissant moi-même"
     ],
     conseils:[
-      "Créez un espace de dialogue régulier où l'éco-anxiété peut s'exprimer sans tabou — ne minimisez jamais cette souffrance",
-      "Identifiez avec votre équipe les actions concrètes à votre échelle : réduire les déplacements inutiles, optimiser les ressources",
-      "Transformez la culpabilité en créativité : lancez un « Lab Impact » où l'équipe propose des améliorations environnementales",
-      "Distinguez ce qui dépend de vous (pratiques d'équipe) de ce qui dépend de l'organisation (stratégie RSE)",
-      "Formez-vous à la Fresque du Climat en équipe pour transformer l'angoisse en compréhension puis en action"
+      "Ouvrez un espace de parole dédié, régulier et sans ordre du jour fixe — appelez-le « café climat » ou « cercle d'inquiétudes » — où chacun peut exprimer ce qu'il ressent sans être jugé ni redirigé vers des solutions. La première erreur du manager est de vouloir rassurer trop vite : valider l'émotion avant de proposer l'action. Concrètement, bloquez 30 minutes par mois, en dehors des réunions de travail, avec une seule règle : on écoute, on ne résout pas.",
+      "Construisez avec votre équipe une cartographie de l'impact réel de votre activité sur deux axes : ce que vous faites qui aggrave la situation (à réduire) et ce que vous faites qui contribue positivement (à amplifier). Cette cartographie doit être co-construite — jamais imposée — et aboutir à 3 engagements collectifs concrets, réalistes et mesurables. Revoyez-les chaque trimestre. L'objectif n'est pas la perfection mais le mouvement.",
+      "Lancez un « Lab Impact » mensuel de 45 minutes : un collaborateur volontaire présente une idée pour réduire l'empreinte de l'équipe ou renforcer son impact positif. Pas de budget requis, pas de validation hiérarchique préalable pour expérimenter à petite échelle. Ce format transforme l'éco-anxiété — émotion paralysante — en éco-créativité — énergie mobilisatrice. Documentez chaque expérimentation, même les échecs.",
+      "Apprenez à distinguer publiquement et clairement ce qui relève de votre périmètre d'action (organisation du travail, achats d'équipe, mobilité professionnelle) de ce qui relève des décisions stratégiques de l'organisation. Cette distinction protège vos collaborateurs d'un sentiment d'impuissance totale : agir à son échelle, même modestement, restaure le sentiment d'efficacité personnelle. Évitez l'erreur inverse : promettre de changer ce qui ne dépend pas de vous.",
+      "Organisez une Fresque du Climat en équipe (format 3h30, animateur certifié, environ 30€ par personne). Cet atelier transforme l'angoisse diffuse en compréhension systémique, ce qui réduit significativement l'anxiété paralysante. Faites-le suivre dans les 15 jours d'un atelier « Et maintenant ? » où l'équipe traduit la compréhension en engagements concrets à son niveau. La compréhension sans action aggrave parfois l'anxiété : les deux ateliers fonctionnent ensemble."
     ],
     chapitreDetail:"Le Chapitre 2 détaille comment l'éco-anxiété s'infiltre dans les organisations. Le Chapitre 4 propose l'approche du « manager cultivateur » qui transforme cette anxiété en force d'action collective.",
     dominoEffect:"L'éco-anxiété non traitée génère une perte de sens (« À quoi bon si on détruit la planète ? »), qui alimente la défiance envers une direction perçue comme inactive, puis l'épuisement moral et le désengagement."
@@ -269,14 +272,17 @@ const CRISES = [
       "Les questions du type « À quoi ça sert ? » reviennent de plus en plus souvent",
       "Je perçois un désalignement entre les valeurs de mes collaborateurs et celles de l'entreprise",
       "L'enthousiasme pour de nouveaux projets est notablement en baisse dans l'équipe",
-      "Certains collaborateurs semblent « faire les gestes » sans conviction ni engagement émotionnel"
+      "Certains collaborateurs semblent « faire les gestes » sans conviction ni engagement émotionnel",
+      "Les nouvelles recrues peinent à trouver du sens dans leurs missions dès les premières semaines",
+      "La vision ou la stratégie de l'entreprise ne fait pas écho dans les conversations informelles de l'équipe",
+      "Je constate une difficulté croissante à mobiliser l'équipe autour d'un objectif collectif inspirant"
     ],
     conseils:[
-      "Reconnectez chaque mission au bénéficiaire final : qui profite concrètement du travail de votre équipe ? Rendez cet impact visible",
-      "Organisez un « atelier raison d'être » pour co-construire le sens collectif — ne l'imposez jamais d'en haut",
-      "Créez des « ponts de sens » : invitez des clients ou bénéficiaires à témoigner devant votre équipe",
-      "Permettez à chacun de consacrer 10% de son temps à un projet porteur de sens personnel",
-      "Questionnez votre propre rapport au sens : un manager qui doute en silence transmet inconsciemment cette crise"
+      "Rendez l'impact de votre équipe visible et concret : identifiez le bénéficiaire final de votre travail — pas l'entreprise abstraite, mais la personne réelle qui bénéficie de ce que vous produisez — et trouvez un moyen de lui donner une voix dans votre quotidien. Invitez un client à témoigner en réunion d'équipe, partagez des verbatims d'utilisateurs, affichez des histoires de bénéficiaires dans les espaces communs. Sans visibilité de l'impact, le sens s'évapore même dans les missions les plus nobles.",
+      "Organisez un « atelier raison d'être » en trois temps : d'abord, chaque membre écrit individuellement pourquoi il fait ce travail (pas pourquoi l'entreprise existe, mais pourquoi lui, personnellement). Ensuite, le groupe partage et cherche les résonances. Enfin, l'équipe co-rédige une phrase de raison d'être collective — pas un slogan corporate, une formulation authentique qui leur appartient. Cet atelier ne se fait pas en 30 minutes : comptez une demi-journée et ne brusquez pas le processus.",
+      "Créez une règle des 10% : chaque collaborateur dispose de 10% de son temps de travail pour un projet qui a du sens pour lui personnellement, même si ce n'est pas directement dans sa fiche de poste. Ce principe, popularisé par 3M et Google, n'est pas un luxe : c'est un investissement dans l'engagement à long terme. La condition pour que ça fonctionne : les projets doivent être partagés collectivement, pas cachés. C'est la visibilité qui crée la légitimité.",
+      "Révisez la façon dont vous présentez les objectifs de l'équipe : remplacez les formulations orientées résultat (« atteindre X% de croissance ») par des formulations orientées contribution (« permettre à nos clients de réduire leur délai de traitement de moitié »). La différence semble cosmétique — elle est fondamentale. Les êtres humains s'engagent pour une cause, pas pour un chiffre. Testez ce changement de formulation à votre prochain kick-off et observez la différence dans l'énergie de la salle.",
+      "Interrogez-vous honnêtement sur votre propre rapport au sens : si vous avez du mal à répondre à la question « pourquoi faites-vous ce travail ? » avec conviction, votre équipe le ressent, même si vous ne dites rien. Un manager qui a perdu le sens transmet cette crise par osmose. Avant d'agir sur votre équipe, prenez le temps d'un dialogue avec un pair de confiance ou un coach pour clarifier votre propre rapport au sens. C'est le préalable à tout le reste."
     ],
     chapitreDetail:"Le Chapitre 2 explore comment la perte de sens est le symptôme d'un désalignement systémique. Les Chapitres 9 et 10 proposent des approches temporelles pour recréer du sens authentique.",
     dominoEffect:"La perte de sens amplifie la défiance (« Si ça n'a pas de sens, c'est qu'on nous ment »), accélère le désengagement et peut provoquer l'épuisement moral."
@@ -292,14 +298,17 @@ const CRISES = [
       "La méfiance envers les promesses de la hiérarchie est palpable dans l'équipe",
       "Du cynisme s'exprime ouvertement lors des réunions ou des annonces de la direction",
       "Certains collaborateurs se sentent trahis par des décisions organisationnelles récentes",
-      "Les valeurs affichées par l'entreprise sont perçues comme déconnectées de la réalité"
+      "Les valeurs affichées par l'entreprise sont perçues comme déconnectées de la réalité",
+      "Les informations stratégiques circulent davantage par la rumeur que par des canaux officiels",
+      "Des décisions ont été prises sans concertation et ont laissé des traces durables dans l'équipe",
+      "Je ressens moi-même des difficultés à relayer certains messages de la direction avec conviction"
     ],
     conseils:[
-      "Pratiquez la transparence radicale : partagez les informations dont vous disposez, y compris vos propres doutes",
-      "Tenez vos promesses ou expliquez pourquoi vous ne pouvez pas — chaque promesse non tenue détruit plus de confiance que 10 tenues n'en construisent",
-      "Créez un « baromètre de confiance » anonyme mensuel et partagez les résultats, même inconfortables",
-      "Distinguez votre rôle de manager de celui de porte-parole de la direction",
-      "Instaurez un rituel « Questions sans filtre » avec l'engagement d'une réponse honnête"
+      "Pratiquez la transparence radicale dès votre prochaine réunion d'équipe : partagez une information que vous auriez normalement gardée pour vous — une incertitude stratégique, une contrainte budgétaire, un doute que vous avez vous-même. La transparence n'est pas de tout dire, c'est de ne pas cacher ce qui concerne les gens. Chaque information retenue que les collaborateurs découvrent par ailleurs détruit trois mois de confiance construite. La règle simple : si ça les concerne, ils doivent l'apprendre de vous, pas de la rumeur.",
+      "Instaurez un rituel « Promesses tenues » à chaque début de réunion mensuelle : listez les engagements pris le mois précédent, indiquez lesquels ont été tenus, expliquez honnêtement ceux qui ne l'ont pas été et pourquoi. Ce rituel, qui demande du courage, est l'un des plus puissants reconstructeurs de confiance qui existe. Il montre que vous prenez vos engagements au sérieux et que vous assumez vos manques. Une promesse non tenue expliquée honnêtement fait moins de dégâts qu'une promesse non tenue ignorée.",
+      "Créez un baromètre de confiance anonyme en 5 questions, envoyé chaque mois via un outil simple (Google Forms suffit). Partagez les résultats intégralement avec l'équipe — y compris les notes basses — et engagez-vous à répondre publiquement aux signaux préoccupants. L'erreur fatale est de faire le baromètre et de ne rien en faire : c'est pire que de ne pas le faire. Le baromètre n'a de valeur que s'il déclenche une conversation et un engagement visible.",
+      "Apprenez à distinguer votre rôle de manager de celui de porte-parole de la direction — et communiquez cette distinction à votre équipe. Quand une décision vient d'en haut et que vous ne l'approuvez pas entièrement, vous pouvez dire : « Cette décision a été prise au niveau de la direction pour des raisons X. Mon rôle est de vous aider à la mettre en œuvre du mieux possible. Si vous avez des questions ou des préoccupations, je me fais le relais. » Cette posture préserve votre crédibilité sans trahir l'organisation.",
+      "Instaurez un rituel mensuel « Questions sans filtre » : 20 minutes en fin de réunion où chaque question posée reçoit une réponse honnête dans les 48h. Les règles : les questions sont anonymes (post-it ou formulaire), toutes les questions reçoivent une réponse (même si la réponse est « je ne sais pas » ou « je ne peux pas vous le dire »), et les questions et réponses sont consignées dans un document partagé. Ce format désarme le cynisme plus efficacement que n'importe quel discours sur les valeurs."
     ],
     chapitreDetail:"Le Chapitre 2 analyse les mécanismes de l'effondrement de la confiance. Le Chapitre 12 propose les 6 principes du management régénératif dont la « transparence nourricière ».",
     dominoEffect:"La défiance génère de l'isolement (chacun se protège), de l'épuisement (l'énergie dépensée à se méfier est considérable) et du désengagement."
@@ -315,14 +324,17 @@ const CRISES = [
       "Je perçois un doute chez certains quant à leur valeur sur le marché du travail",
       "Les opportunités de formation sont perçues comme insuffisantes ou inadaptées",
       "Certains adoptent une posture de résistance face aux nouveaux outils ou méthodes",
-      "Le sentiment de « ne plus être à la page » affecte la confiance en soi de certains"
+      "Le sentiment de « ne plus être à la page » affecte la confiance en soi de certains",
+      "Des collaborateurs évitent de prendre la parole en réunion par crainte de paraître dépassés",
+      "Le rythme d'évolution des compétences requises est perçu comme impossible à tenir",
+      "Je constate un écart générationnel croissant dans le rapport aux outils numériques et à l'IA"
     ],
     conseils:[
-      "Dédramatisez l'IA en organisant des sessions pratiques de découverte : la peur naît de l'inconnu",
-      "Identifiez les compétences « irremplaçables » : créativité, empathie, jugement éthique",
-      "Créez un « plan d'apprentissage vivant » co-construit et actualisé trimestriellement",
-      "Valorisez explicitement l'expérience et la sagesse professionnelle",
-      "Instaurez le « mentorat croisé » : seniors transmettent l'expertise, juniors partagent le digital"
+      "Organisez une session de démystification de l'IA en deux temps : d'abord, laissez chaque membre exprimer ses craintes réelles (perdre son emploi, ne pas comprendre, être jugé incompétent) — sans les minimiser. Ensuite, faites tester ensemble un outil d'IA sur une tâche concrète du quotidien de l'équipe. La peur naît de l'abstraction : une heure d'expérimentation pratique fait plus pour la réassurance que dix discours rassurants. Rendez l'IA familière avant de la rendre utile.",
+      "Réalisez collectivement une cartographie des compétences « irremplaçables » de votre équipe : créativité, empathie, jugement éthique, gestion de la complexité relationnelle, connaissance du contexte client, mémoire organisationnelle. Affichez cette cartographie. Elle rappelle à chacun ce que la technologie ne peut pas reproduire et repositionne l'humain non pas comme concurrent de la machine, mais comme ce qui donne sens à ce que la machine produit.",
+      "Co-construisez avec chaque collaborateur un « plan d'apprentissage vivant » mis à jour chaque trimestre : 3 compétences à développer (une technique, une transversale, une relationnelle), les ressources disponibles (formation interne, MOOC, mentoring, expérimentation), et un indicateur simple pour mesurer la progression. Ce plan ne doit pas être un document RH supplémentaire : c'est un contrat de développement entre le manager et le collaborateur, revu ensemble, pas évalué de façon unilatérale.",
+      "Valorisez explicitement et publiquement l'expérience et la sagesse professionnelle lors de vos réunions d'équipe. Quand un collaborateur senior partage un retour d'expérience, nommez-le comme une ressource précieuse : « Ce que tu viens de partager, aucune IA ne peut le produire — c'est le résultat de 15 ans de pratique. » Ce type de reconnaissance reconstruit la confiance en soi des profils qui se sentent menacés par la montée des nouvelles technologies.",
+      "Instaurez le mentorat croisé bi-directionnel : les collaborateurs seniors partagent leur expertise métier, relationnelle et contextuelle avec les juniors ; les juniors accompagnent les seniors dans la maîtrise des outils numériques et des nouvelles méthodes. Ce format brise la hiérarchie implicite du savoir, valorise chaque génération pour ce qu'elle apporte réellement, et crée un lien intergénérationnel qui renforce la cohésion de l'équipe au passage. Formalisez ces binômes avec un cadre clair : objectif, durée, fréquence."
     ],
     chapitreDetail:"Le Chapitre 2 décortique la crise d'obsolescence. Le Chapitre 8 (économie circulaire des compétences) et le Chapitre 11 (management éco-responsable) proposent des approches concrètes.",
     dominoEffect:"L'obsolescence génère de l'éco-anxiété technologique, amplifie l'épuisement et peut provoquer un désengagement défensif."
@@ -338,14 +350,17 @@ const CRISES = [
       "La charge de travail est considérée comme « normale » alors qu'elle est objectivement excessive",
       "Certains collaborateurs négligent leur santé par manque de temps",
       "Le sentiment d'être vidé émotionnellement après une journée de travail est fréquemment exprimé",
-      "Les arrêts maladie ou les signes de fragilité se multiplient dans l'équipe"
+      "Les arrêts maladie ou les signes de fragilité se multiplient dans l'équipe",
+      "Les congés et week-ends ne suffisent plus à restaurer l'énergie de certains collaborateurs",
+      "Des membres de l'équipe expriment ne plus trouver de plaisir dans des activités qui les motivaient auparavant",
+      "Je constate que l'erreur et l'irritabilité augmentent en période de charge, signe d'une fatigue cognitive avancée"
     ],
     conseils:[
-      "URGENCE : Si plusieurs collaborateurs présentent des signes de burnout, activez immédiatement les dispositifs de prévention",
-      "Auditez la charge réelle : demandez à chacun de lister tout ce qu'il fait pendant une semaine",
-      "Protégez les temps de récupération : pas de mails après 19h, vraies pauses déjeuner",
-      "Distinguez « occupé » de « productif » : supprimez réunions inutiles et reportings superflus",
-      "Montrez l'exemple : un manager épuisé donne la permission à l'équipe de s'épuiser"
+      "URGENCE MÉDICALE ET LÉGALE : Si vous identifiez un ou plusieurs collaborateurs présentant des signes de burnout avéré (épuisement total, incapacité à travailler, symptômes physiques et psychiques persistants), activez immédiatement les dispositifs de votre organisation : médecine du travail, service RH, cellule de soutien psychologique. En tant que manager, vous n'êtes pas thérapeute — mais vous avez une obligation légale de protection. Documentez vos observations et vos actions. Agir tard aggrave les conséquences humaines et engage votre responsabilité.",
+      "Réalisez un audit de charge réelle avec toute votre équipe : demandez à chacun de lister pendant une semaine tout ce qu'il fait, le temps que ça prend, et si c'est nécessaire ou délégable. Vous serez surpris de la quantité de travail invisible, de tâches administratives inutiles et de réunions sans valeur ajoutée qui consomment l'énergie de votre équipe. Analysez les résultats collectivement et supprimez ou déléguez au moins 20% des tâches identifiées comme peu utiles. L'épuisement naît rarement d'un manque de volonté : il naît d'une charge mal distribuée et mal questionnée.",
+      "Protégez les temps de récupération avec des règles collectives explicites et non négociables : pas d'emails ou de messages professionnels après 19h (sauf urgence définie), vraies pauses déjeuner sans écran ni sujets de travail, droit à la déconnexion totale pendant les congés. Ces règles ne fonctionnent que si vous les respectez vous-même en premier. Envoyer un email à 22h en disant « pas besoin de répondre ce soir » est une injonction contradictoire : vos collaborateurs les plus anxieux répondront quand même.",
+      "Apprenez à distinguer l'occupation productive de l'agitation stérile. Posez cette question à votre équipe une fois par trimestre : « Si on devait supprimer 30% de notre activité sans impact sur nos résultats, que supprimerait-on ? » Les réponses sont toujours révélatrices. Les réunions de reporting hebdomadaires, les validations en cascade, les présentations internes interminables — tout cela consomme de l'énergie sans en produire. La suppression courageuse d'une réunion inutile vaut mieux que dix séances de team building.",
+      "Montrez l'exemple avec une cohérence absolue : si vous êtes vous-même en état d'épuisement chronique, que vous envoyez des messages à toute heure, que vous ne prenez jamais de vraies vacances et que vous vous vantez de travailler le week-end, vous donnez à votre équipe la permission — voire l'injonction implicite — de faire pareil. Un manager régénératif prend soin de lui non pas par égoïsme mais parce que son état est contagieux. Votre niveau d'énergie et votre rapport au travail sont le thermomètre invisible que votre équipe consulte chaque matin."
     ],
     chapitreDetail:"Le Chapitre 2 révèle comment l'épuisement est devenu un « bruit de fond » normalisé. Le Chapitre 5 (biomimétisme) s'inspire des cycles naturels pour des rythmes régénératifs.",
     dominoEffect:"L'épuisement est le carrefour de toutes les crises : alimenté par toutes les autres, il les amplifie toutes. C'est souvent la crise à traiter en premier."
@@ -361,14 +376,17 @@ const CRISES = [
       "Le télétravail ou le mode hybride a dégradé les relations au sein de l'équipe",
       "Le sentiment d'appartenance à l'équipe s'est affaibli ces derniers mois",
       "Les moments de convivialité et de connexion humaine ont disparu ou sont artificiels",
-      "Certains membres se sentent « invisibles » ou peu considérés dans l'organisation"
+      "Certains membres se sentent « invisibles » ou peu considérés dans l'organisation",
+      "Je perçois des clans ou des sous-groupes qui ne communiquent plus naturellement entre eux",
+      "Des collaborateurs en télétravail sont difficiles à joindre et semblent s'être coupés du collectif",
+      "Personne ne semble remarquer lorsqu'un collaborateur traverse une période difficile"
     ],
     conseils:[
-      "Réinstaurez des rituels de connexion authentiques — pas des team buildings forcés, mais des moments volontaires",
-      "Repensez le télétravail : quelles journées en commun ? Pour quoi faire ? Avec quelles règles co-construites ?",
-      "Créez des « binômes d'entraide » rotatifs mensuels",
-      "Rendez l'invisible visible : célébrez les contributions de chacun, nommez les apports individuels",
-      "Organisez des « cafés sans agenda » de 20 minutes où l'on parle de tout sauf du travail"
+      "Créez des rituels de connexion authentiques — et la distinction entre authentique et forcé est cruciale. Un team building imposé sur une journée en plein air peut aggraver l'isolement de ceux qui ne se sentent pas à leur place dans ces formats. Partez plutôt de ce que votre équipe aime vraiment faire ensemble et construisez à partir de là. Demandez-leur : « Qu'est-ce qui vous donnerait envie de venir au bureau un jour de télétravail ? » Leurs réponses vous indiqueront le bon format, pas votre intuition de manager.",
+      "Repensez votre politique de télétravail en co-construction réelle avec l'équipe — pas une consultation de façade. Posez trois questions : quels jours en commun pour quels usages précis (collaboration, innovation, lien social), quelles règles de disponibilité et de réponse, et comment on s'assure que personne ne se sent exclu ? L'erreur classique est d'imposer des jours de présence sans expliquer pourquoi. Quand les gens comprennent le sens de la présence physique, ils y adhèrent. Quand c'est une obligation administrative, ils la subissent.",
+      "Instaurez des binômes d'entraide rotatifs : chaque mois, deux collaborateurs qui ne travaillent pas habituellement ensemble sont appairés pour un échange informel de 30 minutes — pas sur un projet commun, mais sur leurs défis du moment, leurs questions, leurs ressources. La rotation mensuelle élargit progressivement le réseau de relations de chacun et brise les silos de façon naturelle. La condition de succès : c'est volontaire, pas obligatoire, et les sujets sont libres.",
+      "Rendez visible ce qui est normalement invisible : lors de chaque réunion d'équipe, prenez deux minutes pour nommer une contribution d'un membre qui aurait pu passer inaperçue. Pas les grandes réussites déjà célébrées — les petites contributions qui font tenir l'équipe : celui qui a aidé un collègue en difficulté, celle qui a pris le temps de documenter un process, celui qui a transmis une information utile. Ce rituel simple transforme progressivement la culture de l'équipe en rendant la contribution de chacun explicitement précieuse.",
+      "Organisez des « cafés sans agenda » bimensuels de 20 à 30 minutes en visio ou en présentiel : pas de compte-rendu, pas de décision à prendre, pas de sujet de travail. Juste un espace pour que les gens se parlent en tant que personnes, pas en tant que fonctions. Au début, ça peut sembler artificiel — c'est normal. Après deux ou trois sessions, des conversations naturelles émergent. Ces moments recréent le tissu social informel que le travail hybride a effiloché, et c'est ce tissu qui rend l'isolement impossible."
     ],
     chapitreDetail:"Le Chapitre 2 analyse comment l'isolement s'est intensifié. Le Chapitre 6 (permaculture organisationnelle) propose le concept de « zones de proximité ». Le Chapitre 10 offre des rituels concrets.",
     dominoEffect:"L'isolement crée un terreau fertile pour le désengagement, amplifie l'épuisement (on s'épuise plus vite seul) et aggrave la perte de sens."
@@ -384,14 +402,17 @@ const CRISES = [
       "L'investissement émotionnel dans les projets a chuté de manière notable",
       "Des collaborateurs refusent systématiquement les responsabilités supplémentaires",
       "Le comptage des heures et l'attente du week-end sont devenus des sujets récurrents",
-      "Je perçois une indifférence croissante face aux résultats de l'équipe ou de l'entreprise"
+      "Je perçois une indifférence croissante face aux résultats de l'équipe ou de l'entreprise",
+      "Des collaborateurs ont cessé de partager leurs idées ou de contribuer aux discussions collectives",
+      "Certains membres n'expriment plus ni satisfaction ni insatisfaction : une neutralité inquiétante s'est installée",
+      "Les retours des collaborateurs sur leur propre travail sont devenus rares, voire inexistants"
     ],
     conseils:[
-      "Ne blâmez jamais un collaborateur désengagé : le désengagement est un symptôme, pas une cause",
-      "Ouvrez un dialogue individuel sincère : « J'ai l'impression que quelque chose a changé. Comment puis-je t'aider ? »",
-      "Redonnez de l'autonomie et du pouvoir de décision : le micro-management est le premier facteur de désengagement",
-      "Proposez des missions transverses ou des projets « passion »",
-      "Acceptez que certains désengagements sont légitimes : c'est parfois l'organisation qui doit changer"
+      "Ne jamais blâmer un collaborateur désengagé — et comprendre pourquoi cette règle est non négociable. Le désengagement est toujours un symptôme, jamais une cause. Un collaborateur ne se désengage pas par fainéantise ou mauvaise volonté : il se désengage parce que quelque chose dans son environnement de travail a brisé le contrat psychologique implicite qu'il avait passé avec son organisation. Chercher le coupable en regardant le collaborateur, c'est traiter la fièvre en cassant le thermomètre. La vraie question est : qu'est-ce qui a changé pour lui, et depuis quand ?",
+      "Ouvrez un dialogue individuel sincère dans les 48h après avoir identifié un signe de désengagement. La formulation compte énormément : évitez « je remarque que tu travailles moins » (accusatoire) ou « tout va bien ? » (trop vague). Préférez : « J'ai l'impression que quelque chose a changé pour toi ces dernières semaines. Je me trompe peut-être, mais je préfère t'en parler directement. Comment tu vis ton travail en ce moment ? » Puis taisez-vous et écoutez vraiment. Cet entretien ne doit pas durer plus de 30 minutes — mais il peut changer le cours de la relation.",
+      "Redonnez de l'autonomie réelle et du pouvoir de décision dans le périmètre du collaborateur : le micro-management est le premier facteur de désengagement identifié dans toutes les études sur le sujet. Concrètement, listez les décisions que vous prenez actuellement qui pourraient être prises par vos collaborateurs sans risque majeur, et déléguez-les explicitement. Précisez le cadre (ce qui ne peut pas être décidé sans vous) et laissez le reste. La confiance se manifeste par les actes de délégation, pas par les discours sur l'autonomie.",
+      "Proposez des missions transverses ou des projets « passion » en dehors du périmètre habituel : un collaborateur désengagé dans sa mission principale peut se réveiller sur un projet secondaire qui touche à ce qui l'anime vraiment. Posez-lui la question directement : « Si tu pouvais consacrer 10% de ton temps à quelque chose qui te passionne vraiment dans notre organisation, ce serait quoi ? » La réponse vous donnera une information précieuse sur ce qui peut le remobiliser — et parfois révèle un talent inexploité dont toute l'équipe pourrait bénéficier.",
+      "Acceptez courageusement que certains désengagements sont légitimes et que c'est parfois l'organisation qui doit changer, pas le collaborateur. Si les conditions de travail sont objectivement dégradées, si le management crée du mal-être, si les promesses faites au recrutement n'ont pas été tenues — le désengagement est une réponse saine à une situation malsaine. Dans ce cas, la seule chose honnête est de le reconnaître, d'agir sur les causes systémiques, et d'accompagner dignement ceux qui choisissent de partir plutôt que de rester malheureux."
     ],
     chapitreDetail:"Le Chapitre 2 déconstruit le mythe du « collaborateur fainéant ». Les Chapitres 9 à 11 (les 3 temporalités) offrent un cadre complet pour ré-engager durablement.",
     dominoEffect:"Le désengagement est souvent le stade terminal de l'effet domino. C'est le signal que le système managérial a échoué. Mais c'est aussi une opportunité : traiter les crises en amont peut inverser le processus."
@@ -410,21 +431,22 @@ const SCALE = [
 // TEAM PROFILES (not manager profiles)
 // =====================================================
 function getTeamProfile(total) {
-  // Score range: 49 (all "Jamais") to 245 (all "Très souvent") — 7 profils
-  if (total <= 70) return {name:"L'Équipe Régénérative", emoji:"🌳", color:"#1B5E20", desc:"Votre équipe est un modèle d'écosystème sain. Les 7 crises sont quasi absentes. Vous êtes dans une dynamique vertueuse où chaque membre contribue à la vitalité du collectif. Votre défi : essaimer vos bonnes pratiques et inspirer les autres équipes."};
-  if (total <= 95) return {name:"L'Équipe Florissante", emoji:"🌱", color:"#2E7D32", desc:"Votre équipe présente un écosystème globalement sain. Les crises sont présentes à un niveau faible et ne forment pas de cercle vicieux. Quelques points de vigilance existent mais le terreau est fertile. Continuez à cultiver ce qui fonctionne et restez attentif aux signaux faibles."};
-  if (total <= 120) return {name:"L'Équipe en Éveil", emoji:"🔔", color:"#9E9D24", desc:"Votre équipe fonctionne correctement mais des premiers signaux apparaissent. Ce n'est pas encore l'alerte, mais certaines crises commencent à se manifester. C'est le moment idéal pour agir préventivement : les transformations sont les plus faciles à ce stade."};
-  if (total <= 147) return {name:"L'Équipe en Alerte", emoji:"⚡", color:"#F57F17", desc:"Des signaux d'alerte clairs apparaissent au sein de votre équipe. Plusieurs crises sont actives et commencent à interagir. Le collectif tient encore, mais sans action structurée dans les prochaines semaines, les crises risquent de s'amplifier mutuellement par effet domino."};
-  if (total <= 175) return {name:"L'Équipe sous Tension", emoji:"🔗", color:"#E65100", desc:"Plusieurs crises sont installées dans votre équipe et s'alimentent mutuellement. L'effet domino est en cours. Une intervention structurée est nécessaire, en commençant par la crise « pivot » identifiée ci-dessous. Le management régénératif est une réponse adaptée à cette situation."};
-  if (total <= 210) return {name:"L'Équipe en Crise", emoji:"🔥", color:"#BF360C", desc:"Votre équipe traverse une crise systémique. La majorité des 7 crises sont à un niveau élevé et se renforcent dans un cercle vicieux. Les impacts sont visibles : turnover, désengagement, conflits, épuisement. Une action immédiate et un accompagnement structuré sont indispensables."};
+  // Score range: 70 (all "Jamais") to 350 (all "Très souvent") — 7 profils
+  if (total <= 98)  return {name:"L'Équipe Régénérative", emoji:"🌳", color:"#1B5E20", desc:"Votre équipe est un modèle d'écosystème sain. Les 7 crises sont quasi absentes. Vous êtes dans une dynamique vertueuse où chaque membre contribue à la vitalité du collectif. Votre défi : essaimer vos bonnes pratiques et inspirer les autres équipes."};
+  if (total <= 133) return {name:"L'Équipe Florissante", emoji:"🌱", color:"#2E7D32", desc:"Votre équipe présente un écosystème globalement sain. Les crises sont présentes à un niveau faible et ne forment pas de cercle vicieux. Quelques points de vigilance existent mais le terreau est fertile. Continuez à cultiver ce qui fonctionne et restez attentif aux signaux faibles."};
+  if (total <= 175) return {name:"L'Équipe en Éveil", emoji:"🔔", color:"#9E9D24", desc:"Votre équipe fonctionne correctement mais des premiers signaux apparaissent. Ce n'est pas encore l'alerte, mais certaines crises commencent à se manifester. C'est le moment idéal pour agir préventivement : les transformations sont les plus faciles à ce stade."};
+  if (total <= 217) return {name:"L'Équipe en Alerte", emoji:"⚡", color:"#F57F17", desc:"Des signaux d'alerte clairs apparaissent au sein de votre équipe. Plusieurs crises sont actives et commencent à interagir. Le collectif tient encore, mais sans action structurée dans les prochaines semaines, les crises risquent de s'amplifier mutuellement par effet domino."};
+  if (total <= 259) return {name:"L'Équipe sous Tension", emoji:"🔗", color:"#E65100", desc:"Plusieurs crises sont installées dans votre équipe et s'alimentent mutuellement. L'effet domino est en cours. Une intervention structurée est nécessaire, en commençant par la crise « pivot » identifiée ci-dessous. Le management régénératif est une réponse adaptée à cette situation."};
+  if (total <= 308) return {name:"L'Équipe en Crise", emoji:"🔥", color:"#BF360C", desc:"Votre équipe traverse une crise systémique. La majorité des 7 crises sont à un niveau élevé et se renforcent dans un cercle vicieux. Les impacts sont visibles : turnover, désengagement, conflits, épuisement. Une action immédiate et un accompagnement structuré sont indispensables."};
   return {name:"L'Équipe en Urgence", emoji:"🌊", color:"#C62828", desc:"Votre équipe est en souffrance généralisée. Toutes les crises sont à des niveaux critiques et forment un système toxique auto-entretenu. La priorité absolue est de stabiliser la situation en traitant l'épuisement et les crises relationnelles. Un accompagnement externe est fortement recommandé — ne restez pas seul face à cette situation."};
 }
 
 function getCrisisLevel(score) {
-  if (score <= 14) return {level:"Faible", color:"#2E7D32", emoji:"🟢", action:"Vigilance"};
-  if (score <= 21) return {level:"Modéré", color:"#F57F17", emoji:"🟡", action:"Attention"};
-  if (score <= 28) return {level:"Fort", color:"#E65100", emoji:"🟠", action:"Action rapide"};
-  return {level:"Critique", color:"#C62828", emoji:"🔴", action:"Urgence"};
+  // Max per crisis = 50 (10q × 5)
+  if (score <= 15) return {level:"Faible",   color:"#2E7D32", emoji:"🟢", action:"Vigilance"};
+  if (score <= 28) return {level:"Modéré",   color:"#F57F17", emoji:"🟡", action:"Attention"};
+  if (score <= 40) return {level:"Fort",     color:"#E65100", emoji:"🟠", action:"Action rapide"};
+  return             {level:"Critique", color:"#C62828", emoji:"🔴", action:"Urgence"};
 }
 
 // =====================================================
@@ -570,7 +592,7 @@ function renderResults() {
   const maxTotal = scores.reduce((a,s) => a + s.maxScore, 0);
   const profile = getTeamProfile(totalScore);
   const sorted = [...scores].sort((a,b) => b.score - a.score);
-  const topCrises = sorted.filter(c => c.score > 14);
+  const topCrises = sorted.filter(c => c.score > 15);
   const pivot = sorted[0];
 
   const name = document.getElementById('inp-name').value || 'Manager';
@@ -605,7 +627,7 @@ function renderResults() {
   h += `</div>`;
 
   // Pivot
-  if (pivot.score > 14) {
+  if (pivot.score > 15) {
     h += `<div style="background:linear-gradient(135deg,${pivot.color}12,${pivot.color}04);border-radius:16px;padding:22px;margin-bottom:20px;border:2px solid ${pivot.color}40">
       <h3 style="color:${pivot.color};font-size:16px;font-weight:800;margin-bottom:8px">🎯 Crise « pivot » de votre équipe : ${pivot.icon} ${pivot.name}</h3>
       <p style="color:#CED4DA;font-size:14px;line-height:1.6;margin-bottom:12px">La crise pivot est celle qui obtient le score le plus élevé. C'est souvent celle qui alimente les autres par effet domino. En la traitant en priorité, vous obtiendrez un impact positif sur l'ensemble de l'écosystème de votre équipe.</p>
@@ -639,7 +661,7 @@ function renderResults() {
     });
 
     // Conseils
-    if (c.score > 14) {
+    if (c.score > 15) {
       h += `<div style="background:rgba(255,255,255,0.025);border-radius:12px;padding:14px;margin:14px 0"><div style="color:#4FC3F7;font-size:12px;font-weight:700;margin-bottom:8px">💡 CONSEILS POUR AGIR</div>`;
       c.conseils.forEach(co => { h += `<div class="conseil-item"><span class="ci-arrow">→</span><span style="color:#CED4DA">${co}</span></div>`; });
       h += `</div>`;
@@ -651,7 +673,7 @@ function renderResults() {
   });
 
   // Plan
-  const planWeek = pivot.score > 21 ? `Traitez en urgence la crise « ${pivot.name} » : ouvrez un dialogue individuel avec chaque membre de votre équipe sur ce sujet.` : 'Partagez ces résultats avec une personne de confiance et définissez votre première priorité.';
+  const planWeek = pivot.score > 28 ? `Traitez en urgence la crise « ${pivot.name} » : ouvrez un dialogue individuel avec chaque membre de votre équipe sur ce sujet.` : 'Partagez ces résultats avec une personne de confiance et définissez votre première priorité.';
   const planMonth = topCrises.length > 0 ? `Concentrez-vous sur les crises prioritaires : ${topCrises.slice(0,2).map(c=>c.name).join(' et ')}. Mettez en place les 2 premiers conseils de chaque crise.` : 'Maintenez votre vigilance et approfondissez votre compréhension avec la lecture du Chapitre 2.';
   h += `<div style="background:linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02));border-radius:16px;padding:22px;margin:24px 0 14px;border:1px solid rgba(76,175,80,0.2)">
     <h3 style="color:#66BB6A;font-size:17px;font-weight:800;margin-bottom:14px">🚀 Plan d'action recommandé pour votre équipe</h3>
@@ -780,7 +802,7 @@ function downloadReport() {
   body += '</w:tbl>';
 
   // Crise pivot
-  if(pivot.score>14){
+  if(pivot.score>15){
     body += p('  Crise pivot : '+pivot.name,{size:26,bold:true,color:'2C3E50',borderLeft:{sz:12,color:'FF6B35'},indent:200,before:'400',after:'200'});
     body += p(pivot.dominoEffect,{size:20,color:'495057',after:'200'});
   }
@@ -803,7 +825,7 @@ function downloadReport() {
     });
     body += '</w:tbl>';
 
-    if(c.score>14){
+    if(c.score>15){
       body += p('Conseils pour agir',{bold:true,size:22,color:'1B4F72',before:'200',after:'100'});
       c.conseils.forEach(function(co){
         body += p('  '+co,{size:20,borderLeft:{sz:8,color:'4FC3F7'},indent:300,after:'60'});
@@ -818,7 +840,7 @@ function downloadReport() {
 
   // Plan d'action
   body += p('  Plan d\'action pour l\'équipe',{size:26,bold:true,color:'2C3E50',borderLeft:{sz:12,color:'FF6B35'},indent:200,before:'300',after:'200'});
-  body += p2('Cette semaine : ',{bold:true,size:20,after:'100'}, pivot.score>21?'Traitez en urgence la crise « '+pivot.name+' ».':'Définissez votre première priorité.',{size:20});
+  body += p2('Cette semaine : ',{bold:true,size:20,after:'100'}, pivot.score>28?'Traitez en urgence la crise « '+pivot.name+' ».':'Définissez votre première priorité.',{size:20});
   body += p2('Ce mois : ',{bold:true,size:20,after:'100'}, topCrises.length>0?'Concentrez-vous sur : '+topCrises.slice(0,2).map(function(c){return c.name}).join(' et ')+'.':'Maintenez votre vigilance.',{size:20});
   body += p2('Ce trimestre : ',{bold:true,size:20,after:'300'}, 'Déployez les feuilles de route. Refaites ce diagnostic dans 3 mois.',{size:20});
 
